@@ -572,7 +572,7 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
               },
               {
                 title: "Employee Attendance System",
-                image: "./public/SI.png",
+                image: "/SI.png",
                 description:
                   "A web-based attendance system to manage employee presence and generate daily reports efficiently.",
                 tech: ["HTML", "CSS", "PHP", "MySQL"],
@@ -580,7 +580,7 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
               },
               {
                 title: "Online Store Prototype",
-                image: "./public/web.png",
+                image: "/web.png",
                 description:
                   "A responsive web prototype for online retail with a shopping cart and product display.",
                 tech: ["Figma", "HTML", "CSS", "JavaScript"],
@@ -588,7 +588,7 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
               },
               {
                 title: "Personal Portfolio Website",
-                image: "./public/webpersonal.png",
+                image: "/webpersonal.png",
                 description:
                   "An interactive portfolio site to showcase my profile, skills, and recent projects.",
                 tech: ["Next.js", "Tailwind CSS", "TypeScript"],
@@ -596,7 +596,7 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
               },
               {
                 title: "Dynamic Blog Platform",
-                image: "./public/Blog.png",
+                image: "/Blog.png",
                 description:
                   "A CMS-based blog with user authentication, commenting, and rich text editing.",
                 tech: ["React", "Firebase", "QuillJS"],
@@ -604,7 +604,7 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
               },
               {
                 title: "Creative Canva Designs",
-                image: "./public/design.png",
+                image: "/design.png",
                 description:
                   "A collection of digital marketing visuals and templates made using Canva.",
                 tech: ["Canva", "Brand Design", "Marketing"],
@@ -612,7 +612,7 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
               },
               {
                 title: "Educational Game - Hijaiyah",
-                image: "./public/game.png",
+                image: "/game.png",
                 description:
                   "An interactive Arabic game built with Construct 2 to teach children Hijaiyah letters.",
                 tech: ["Construct 2", "Game Design"],
@@ -620,7 +620,7 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
               },
               {
                 title: "Social Media Growth Strategy",
-                image: "./public/sms.png",
+                image: "/sms.png",
                 description:
                   "Grew a TikTok account to over 1,000 followers in 2 months with content planning and analytics.",
                 tech: ["TikTok", "Analytics", "Content Strategy"],
@@ -628,7 +628,7 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
               },
               {
                 title: "UI/UX Design Case Study",
-                image: "./public/uiux.png",
+                image: "/uiux.png",
                 description:
                   "A comprehensive UI/UX case study focusing on user flow and usability for web and mobile.",
                 tech: ["Figma", "UX Research", "Wireframing"],
@@ -636,7 +636,7 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
               },
               {
                 title: "Social Blog Website",
-                image: "./public/web3.png",
+                image: "/web3.png",
                 description:
                   "A social-themed blog platform for community interaction, complete with tags and filters.",
                 tech: ["Laravel", "MySQL", "Bootstrap"],
