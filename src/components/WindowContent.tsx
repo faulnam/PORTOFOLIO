@@ -564,7 +564,7 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
             {[
               {
                 title: "Modern E-Commerce Platform",
-                image: "./public/Web onlin.png",
+                image: "/Web onlin.png",
                 description:
                   "A full-stack online store built with React and Node.js, featuring product management and secure checkout.",
                 tech: ["React", "Node.js", "MongoDB", "Tailwind CSS"],
