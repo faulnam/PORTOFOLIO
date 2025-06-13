@@ -564,7 +564,7 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
             {[
               {
                 title: "Modern E-Commerce Platform",
-                image: "./Web onlin.png",
+                image: "./public/Web onlin.png",
                 description:
                   "A full-stack online store built with React and Node.js, featuring product management and secure checkout.",
                 tech: ["React", "Node.js", "MongoDB", "Tailwind CSS"],
@@ -572,7 +572,7 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
               },
               {
                 title: "Employee Attendance System",
-                image: "./SI.png",
+                image: "./public/SI.png",
                 description:
                   "A web-based attendance system to manage employee presence and generate daily reports efficiently.",
                 tech: ["HTML", "CSS", "PHP", "MySQL"],
@@ -580,7 +580,7 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
               },
               {
                 title: "Online Store Prototype",
-                image: "./web.png",
+                image: "./public/web.png",
                 description:
                   "A responsive web prototype for online retail with a shopping cart and product display.",
                 tech: ["Figma", "HTML", "CSS", "JavaScript"],
@@ -588,7 +588,7 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
               },
               {
                 title: "Personal Portfolio Website",
-                image: "./webpersonal.png",
+                image: "./public/webpersonal.png",
                 description:
                   "An interactive portfolio site to showcase my profile, skills, and recent projects.",
                 tech: ["Next.js", "Tailwind CSS", "TypeScript"],
@@ -596,7 +596,7 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
               },
               {
                 title: "Dynamic Blog Platform",
-                image: "./Blog.png",
+                image: "./public/Blog.png",
                 description:
                   "A CMS-based blog with user authentication, commenting, and rich text editing.",
                 tech: ["React", "Firebase", "QuillJS"],
@@ -604,7 +604,7 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
               },
               {
                 title: "Creative Canva Designs",
-                image: "./design.png",
+                image: "./public/design.png",
                 description:
                   "A collection of digital marketing visuals and templates made using Canva.",
                 tech: ["Canva", "Brand Design", "Marketing"],
@@ -612,7 +612,7 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
               },
               {
                 title: "Educational Game - Hijaiyah",
-                image: "./game.png",
+                image: "./public/game.png",
                 description:
                   "An interactive Arabic game built with Construct 2 to teach children Hijaiyah letters.",
                 tech: ["Construct 2", "Game Design"],
@@ -620,7 +620,7 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
               },
               {
                 title: "Social Media Growth Strategy",
-                image: "./sms.png",
+                image: "./public/sms.png",
                 description:
                   "Grew a TikTok account to over 1,000 followers in 2 months with content planning and analytics.",
                 tech: ["TikTok", "Analytics", "Content Strategy"],
@@ -628,7 +628,7 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
               },
               {
                 title: "UI/UX Design Case Study",
-                image: "./uiux.png",
+                image: "./public/uiux.png",
                 description:
                   "A comprehensive UI/UX case study focusing on user flow and usability for web and mobile.",
                 tech: ["Figma", "UX Research", "Wireframing"],
@@ -636,7 +636,7 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
               },
               {
                 title: "Social Blog Website",
-                image: "./web3.png",
+                image: "./public/web3.png",
                 description:
                   "A social-themed blog platform for community interaction, complete with tags and filters.",
                 tech: ["Laravel", "MySQL", "Bootstrap"],
