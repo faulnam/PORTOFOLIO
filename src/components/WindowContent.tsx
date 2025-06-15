@@ -547,6 +547,188 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
         </div>
       );
 
+    case "certificates":
+      return (
+        <div
+          className="p-8"
+          style={{
+            fontFamily:
+              '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
+          }}
+        >
+          <h1 className={`text-4xl font-light mb-8 ${textColor}`}>
+            📄 Certificates
+          </h1>
+
+          <div className="grid gap-6">
+            {[
+              {
+                title: "Specialist Media Social",
+                number: "-",
+                image: "/tumbu.png",
+                description:
+                  "Sertifikat ini membuktikan keahlian dalam merancang, mengelola, dan mengevaluasi strategi media sosial yang efektif untuk meningkatkan brand awareness dan engagement.",
+              },
+              {
+                title: "Digital Marketing",
+                number: "-",
+                image: "/1.png",
+                description:
+                  "Mengenal dasar-dasar pemasaran digital, termasuk strategi online, periklanan, hingga konversi pelanggan dalam ekosistem digital modern.",
+              },
+              {
+                title: "Mastering Capcut",
+                number: "626/25/FTH/2024",
+                image: "/2.png",
+                description:
+                  "Sertifikat ini menunjukkan kemampuan dalam mengedit video kreatif menggunakan Capcut untuk konten digital, termasuk efek, transisi, dan storytelling visual.",
+              },
+              {
+                title: "Digital Advertising menggunakan Meta Ads",
+                number: "625/27/FTH/2024",
+                image: "/3.png",
+                description:
+                  "Mendalami strategi iklan digital melalui platform Meta (Facebook & Instagram Ads), termasuk segmentasi, targeting, dan optimalisasi kampanye.",
+              },
+              {
+                title: "Menyusun CV yang Profesional dan Menunjang Karir",
+                number: "624/6/FTH/2024",
+                image: "/17.png",
+                description:
+                  "Pelatihan ini memberikan panduan praktis untuk membuat CV profesional yang menarik HRD dan relevan dengan kebutuhan industri.",
+              },
+              {
+                title: "Memaksimalkan LinkedIn untuk Peluang Kerja",
+                number: "623/7/FTH/2024",
+                image: "/5.png",
+                description:
+                  "Menjelaskan cara membangun profil LinkedIn yang kuat, memperluas jaringan profesional, dan menarik rekruter melalui strategi konten.",
+              },
+              {
+                title: "Rahasia Sukses dalam Wawancara Kerja",
+                number: "622/8/FTH/2024",
+                image: "/6.png",
+                description:
+                  "Mengajarkan teknik menjawab pertanyaan wawancara, membangun kesan positif, dan mempresentasikan diri secara profesional.",
+              },
+              {
+                title: "Teknik Pembuatan Presentasi yang Memikat",
+                number: "621/9/FTH/2024",
+                image: "/7.png",
+                description:
+                  "Pelatihan ini membahas cara menyusun slide yang menarik, menyampaikan pesan dengan efektif, dan menjaga perhatian audiens.",
+              },
+              {
+                title: "Search Engine Optimization Fundamental",
+                number: "619/23/FTH/2024",
+                image: "/8.png",
+                description:
+                  "Mempelajari dasar-dasar SEO, termasuk optimasi on-page, keyword research, dan peningkatan peringkat di mesin pencari.",
+              },
+              {
+                title: "Customer Segmentation",
+                number: "618/1/FTH/2024",
+                image: "/9.png",
+                description:
+                  "Sertifikat ini menunjukkan pemahaman dalam membagi pasar menjadi segmen yang relevan untuk meningkatkan efektivitas kampanye pemasaran.",
+              },
+              {
+                title: "Digital Marketing Channel",
+                number: "617/4/FTH/2024",
+                image: "/10.png",
+                description:
+                  "Mengenal berbagai kanal digital (email, sosial media, website, dll) dan bagaimana mengelolanya secara terintegrasi.",
+              },
+              {
+                title: "Social Media Marketing",
+                number: "616/17/FTH/2024",
+                image: "/11.png",
+                description:
+                  "Pelatihan dalam strategi pemasaran melalui platform media sosial, mulai dari perencanaan konten hingga analisis performa.",
+              },
+              {
+                title: "Content Marketing",
+                number: "615/5/FTH/2024",
+                image: "/12.png",
+                description:
+                  "Fokus pada cara membuat konten yang relevan dan bernilai untuk menarik, melibatkan, dan mempertahankan audiens.",
+              },
+              {
+                title: "Seni Komunikasi Efektif",
+                number: "620/10/FTH/2024",
+                image: "/13.png",
+                description:
+                  "Mempelajari teknik komunikasi interpersonal yang efektif, baik verbal maupun non-verbal, dalam konteks profesional.",
+              },
+              {
+                title: "Business Model Development",
+                number: "614/2/FTH/2024",
+                image: "/14.png",
+                description:
+                  "Sertifikat ini membuktikan kemampuan merancang dan mengembangkan model bisnis inovatif yang berkelanjutan.",
+              },
+              {
+                title: "Analytics and Data-Driven Marketing",
+                number: "613/3/FTH/2024",
+                image: "/15.png",
+                description:
+                  "Menunjukkan kompetensi dalam menganalisis data pemasaran untuk mengambil keputusan strategis berbasis insight.",
+              },
+              {
+                title: "Product Marketing",
+                number: "612/15/FTH/2024",
+                image: "/16.png",
+                description:
+                  "Fokus pada strategi peluncuran produk, positioning, dan komunikasi nilai produk untuk pasar sasaran.",
+              },
+              {
+                title: "Introduction to Digital Marketing",
+                number: "611/12/FTH/2024",
+                image: "/4.png",
+                description:
+                  "Sebagai pengantar dunia pemasaran digital, sertifikat ini mencakup overview kanal digital, strategi dasar, dan tren industri.",
+              },
+            ].map((cert, index) => (
+              <div
+                key={index}
+                className={`rounded-2xl border transition-all duration-300 hover:shadow-xl hover:scale-[1.02] ${cardBg} ${borderColor} backdrop-blur-sm overflow-hidden`}
+              >
+                <div className="md:flex">
+                  <div className="md:w-1/3">
+                    <img
+                      src={cert.image}
+                      alt={cert.title}
+                      className="w-full h-48 md:h-full object-cover"
+                    />
+                  </div>
+                  <div className="md:w-2/3 p-6 flex flex-col justify-between">
+                    <div>
+                      <h3 className={`text-xl font-semibold mb-1 ${textColor}`}>
+                        {cert.title}
+                      </h3>
+                      <p className={`${secondaryTextColor} text-sm`}>
+                        No. Sertifikat:{" "}
+                        <span className="font-mono">{cert.number}</span>
+                      </p>
+                      <p className={`${secondaryTextColor} text-sm mt-2`}>
+                        {cert.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-12 text-center">
+            <p className={`${secondaryTextColor} mb-6 text-lg`}>
+              This page shows the official certificates I've earned through
+              online courses and digital training sessions.
+            </p>
+          </div>
+        </div>
+      );
+
     case "projects":
       return (
         <div
@@ -802,7 +984,9 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
                 <h3 className={`text-xl font-semibold mb-4 ${textColor}`}>
                   Let's Work Together
                 </h3>
-                <p className={`text-justify ${secondaryTextColor} leading-relaxed text-lg`}>
+                <p
+                  className={`text-justify ${secondaryTextColor} leading-relaxed text-lg`}
+                >
                   I'm always interested in hearing about new opportunities and
                   exciting projects. Whether you have a question, want to
                   discuss a project, or just want to say hi, I'd love to hear
