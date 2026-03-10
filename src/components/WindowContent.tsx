@@ -745,6 +745,16 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
           <div className="grid gap-8">
             {[
               {
+                title: "Website E-Commerce ",
+                image: "/webpatah.png",
+                description:
+                  "Sistem ini mengelola order secara otomatis dengan penugasan kurir terdekat berbasis jarak (Haversine), pelacakan real-time, payment gateway, dan estimasi waktu tiba. Dilengkapi analisis stok dan rekomendasi produk, proses terjadwal untuk pembatalan order, notifikasi, serta alur pembatalan dengan pemulihan stok dan pelacakan refund. Dibangun menggunakan Laravel 11, MySQL, Bootstrap 5, Leaflet.js, dan Queue Jobs.",
+
+                tech: ["Laravel", "Blade", "MySql"],
+                stars: 96,
+                link: "https://lnkd.in/gdTvt53K",
+              },
+              {
                 title: "Design E-Commerce ",
                 image: "/patah.png",
                 description:
@@ -776,9 +786,9 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
               },
               {
                 title: "Profile Desa",
-                image: "/profildesa.png",
+                image: "/desa.png",
                 description:
-                  "An unofficial village profile website designed to display demographic data, local governance information, and geographic features. Built using PHP Blade with a clean Bootstrap layout and MySQL integration.",
+                  "An uvillage profile website designed to display demographic data, local governance information, and geographic features. Built using PHP Blade with a clean Bootstrap layout and MySQL integration.",
 
                 tech: ["Blade", "Php", "MySQL", "Bootstrap"],
                 stars: 96,
