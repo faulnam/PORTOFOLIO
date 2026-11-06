@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 interface TypewriterTextProps {
   text: string;
   isDark: boolean;
+  paused?: boolean;
   className?: string;
   speed?: number; // kecepatan ketik per karakter
   deleteSpeed?: number; // kecepatan hapus per karakter
@@ -10,9 +11,10 @@ interface TypewriterTextProps {
   delayBeforeType?: number; // jeda sebelum mulai ngetik ulang
 }
 
-const TypewriterText: React.FC<TypewriterTextProps> = ({
+const TypewriterText: React.FC<TypewriterTextProps> = React.memo(({
   text,
   isDark,
+  paused = false,
   className = "",
   speed = 100,
   deleteSpeed = 50,
@@ -23,7 +25,8 @@ const TypewriterText: React.FC<TypewriterTextProps> = ({
   const [typing, setTyping] = useState(true);
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
+    if (paused) return;
+    let timeout: ReturnType<typeof setTimeout>;
 
     if (typing) {
       if (displayedText.length < text.length) {
@@ -44,7 +47,7 @@ const TypewriterText: React.FC<TypewriterTextProps> = ({
     }
 
     return () => clearTimeout(timeout);
-  }, [text, typing, displayedText, speed, deleteSpeed, delayBeforeDelete, delayBeforeType]);
+  }, [text, typing, displayedText, speed, deleteSpeed, delayBeforeDelete, delayBeforeType, paused]);
 
   return (
     <p
@@ -62,6 +65,6 @@ const TypewriterText: React.FC<TypewriterTextProps> = ({
       <span className="animate-blink"></span>
     </p>
   );
-};
+});
 
 export default TypewriterText;

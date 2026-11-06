@@ -10,7 +10,7 @@ interface TopBarProps {
   isDark: boolean;
 }
 
-const TopBar: React.FC<TopBarProps> = ({ isDark }) => {
+const TopBar: React.FC<TopBarProps> = React.memo(({ isDark }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -37,10 +37,10 @@ const TopBar: React.FC<TopBarProps> = ({ isDark }) => {
 
 
   return (
-    <div className={`fixed top-0 left-0 right-0 h-7 flex items-center justify-between px-4 text-sm font-medium z-50 backdrop-blur-xl transition-all duration-300 ${
+    <div className={`fixed top-0 left-0 right-0 h-7 flex items-center justify-between px-4 text-sm font-medium z-50 backdrop-blur-md transition-colors duration-200 ${
       isDark 
-        ? 'bg-gray-900/80 text-white border-b border-gray-700/30' 
-        : 'bg-white/60 text-black border-b border-white/20'
+        ? 'bg-gray-900/85 text-white border-b border-gray-700/30' 
+        : 'bg-white/75 text-black border-b border-white/20'
     }`} style={{ 
       fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif'
     }}>
@@ -67,6 +67,6 @@ const TopBar: React.FC<TopBarProps> = ({ isDark }) => {
       </div>
     </div>
   );
-};
+});
 
 export default TopBar;

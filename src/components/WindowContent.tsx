@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Github,
   Linkedin,
@@ -8,12 +8,17 @@ import {
   Code,
   Database,
   Globe,
-  Smartphone,
+  Layers,
   ExternalLink,
   Download,
   Star,
-  Users,
+  Briefcase,
   Award,
+  GraduationCap,
+  Phone,
+  CheckCircle2,
+  X,
+  ZoomIn,
 } from "lucide-react";
 
 interface WindowContentProps {
@@ -21,86 +26,477 @@ interface WindowContentProps {
   isDark: boolean;
 }
 
-const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
+const SKILLS = [
+  {
+    category: "Backend Development",
+    items: [
+      "PHP",
+      "Laravel",
+      "MySQL",
+      "REST API Integration",
+      "Autentikasi & Otorisasi",
+      "CRUD & Pengolahan Data",
+    ],
+    icon: Database,
+    level: 95,
+  },
+  {
+    category: "Frontend Development",
+    items: [
+      "JavaScript",
+      "Tailwind CSS",
+      "Alpine.js",
+      "Blade Templating",
+      "HTML5 & CSS3",
+      "Responsive Web Design",
+    ],
+    icon: Globe,
+    level: 92,
+  },
+  {
+    category: "Tools & Deployment",
+    items: [
+      "Git & GitHub",
+      "Postman",
+      "Payment Gateway (Midtrans/Xendit)",
+      "Domain & Hosting Setup",
+      "WhatsApp API Integration",
+      "Keamanan Siber (BNSP)",
+    ],
+    icon: Code,
+    level: 90,
+  },
+  {
+    category: "Produk Digital & Lainnya",
+    items: [
+      "Template Boilerplate Web",
+      "Canva & Figma (UI/UX Dasar)",
+      "Copywriting & MS Office",
+      "Manajemen Proyek Klien",
+    ],
+    icon: Layers,
+    level: 88,
+  },
+];
+
+const PROFICIENCIES = [
+  {
+    skill: "PHP & Laravel Framework",
+    level: 95,
+    color: "from-red-500 to-orange-500",
+  },
+  {
+    skill: "Blade, Tailwind CSS & Alpine.js",
+    level: 92,
+    color: "from-blue-500 to-cyan-500",
+  },
+  {
+    skill: "MySQL & REST API Integration",
+    level: 90,
+    color: "from-emerald-500 to-green-500",
+  },
+  {
+    skill: "Payment Gateway (Midtrans/Xendit) & Deployment",
+    level: 88,
+    color: "from-purple-500 to-indigo-500",
+  },
+  {
+    skill: "Pengembangan Boilerplate Website Siap Pakai",
+    level: 94,
+    color: "from-amber-400 to-orange-500",
+  },
+  {
+    skill: "Keamanan Siber (BNSP Junior Cyber Security)",
+    level: 90,
+    color: "from-blue-600 to-indigo-500",
+  },
+  {
+    skill: "UI/UX Dasar (Figma/Canva) & Manajemen Proyek Klien",
+    level: 85,
+    color: "from-pink-500 to-rose-500",
+  },
+];
+
+const CERTIFICATES = [
+  {
+    title: "Sertifikat Kompetensi BNSP — Keamanan Siber Muda (Junior Cyber Security)",
+    number: "No. 62021 2529 2 0150163 2025 / Reg. TIK 1565 34852 2025",
+    image: "/bnsp-cyber-security.jpg",
+    description:
+      "Sertifikat Kompetensi resmi berskala nasional dari Badan Nasional Sertifikasi Profesi (BNSP) melalui Lembaga Sertifikasi Profesi (LSP) Teknologi Digital. Menyatakan M. Syifaul Anam telah kompeten pada bidang Keamanan Siber (Cyber Security) dengan kualifikasi Keamanan Siber Muda (Junior Cyber Security).",
+    badge: "Sertifikasi Profesi BNSP",
+  },
+  {
+    title: "Specialist Media Social",
+    number: "-",
+    image: "/tumbu.png",
+    description:
+      "Sertifikat ini membuktikan keahlian dalam merancang, mengelola, dan mengevaluasi strategi media sosial yang efektif untuk meningkatkan brand awareness dan engagement.",
+  },
+  {
+    title: "Digital Marketing",
+    number: "-",
+    image: "/1.png",
+    description:
+      "Mengenal dasar-dasar pemasaran digital, termasuk strategi online, periklanan, hingga konversi pelanggan dalam ekosistem digital modern.",
+  },
+  {
+    title: "Mastering Capcut",
+    number: "626/25/FTH/2024",
+    image: "/2.png",
+    description:
+      "Sertifikat ini menunjukkan kemampuan dalam mengedit video kreatif menggunakan Capcut untuk konten digital, termasuk efek, transisi, dan storytelling visual.",
+  },
+  {
+    title: "Digital Advertising menggunakan Meta Ads",
+    number: "625/27/FTH/2024",
+    image: "/3.png",
+    description:
+      "Mendalami strategi iklan digital melalui platform Meta (Facebook & Instagram Ads), termasuk segmentasi, targeting, dan optimalisasi kampanye.",
+  },
+  {
+    title: "Menyusun CV yang Profesional dan Menunjang Karir",
+    number: "624/6/FTH/2024",
+    image: "/17.png",
+    description:
+      "Pelatihan ini memberikan panduan praktis untuk membuat CV profesional yang menarik HRD dan relevan dengan kebutuhan industri.",
+  },
+  {
+    title: "Memaksimalkan LinkedIn untuk Peluang Kerja",
+    number: "623/7/FTH/2024",
+    image: "/5.png",
+    description:
+      "Menjelaskan cara membangun profil LinkedIn yang kuat, memperluas jaringan profesional, dan menarik rekruter melalui strategi konten.",
+  },
+  {
+    title: "Rahasia Sukses dalam Wawancara Kerja",
+    number: "622/8/FTH/2024",
+    image: "/6.png",
+    description:
+      "Mengajarkan teknik menjawab pertanyaan wawancara, membangun kesan positif, dan mempresentasikan diri secara profesional.",
+  },
+  {
+    title: "Teknik Pembuatan Presentasi yang Memikat",
+    number: "621/9/FTH/2024",
+    image: "/7.png",
+    description:
+      "Pelatihan ini membahas cara menyusun slide yang menarik, menyampaikan pesan dengan efektif, dan menjaga perhatian audiens.",
+  },
+  {
+    title: "Search Engine Optimization Fundamental",
+    number: "619/23/FTH/2024",
+    image: "/8.png",
+    description:
+      "Mempelajari dasar-dasar SEO, termasuk optimasi on-page, keyword research, dan peningkatan peringkat di mesin pencari.",
+  },
+  {
+    title: "Customer Segmentation",
+    number: "618/1/FTH/2024",
+    image: "/9.png",
+    description:
+      "Sertifikat ini menunjukkan pemahaman dalam membagi pasar menjadi segmen yang relevan untuk meningkatkan efektivitas kampanye pemasaran.",
+  },
+  {
+    title: "Digital Marketing Channel",
+    number: "617/4/FTH/2024",
+    image: "/10.png",
+    description:
+      "Mengenal berbagai kanal digital (email, sosial media, website, dll) dan bagaimana mengelolanya secara terintegrasi.",
+  },
+  {
+    title: "Social Media Marketing",
+    number: "616/17/FTH/2024",
+    image: "/11.png",
+    description:
+      "Pelatihan dalam strategi pemasaran melalui platform media sosial, mulai dari perencanaan konten hingga analisis performa.",
+  },
+  {
+    title: "Content Marketing",
+    number: "615/5/FTH/2024",
+    image: "/12.png",
+    description:
+      "Fokus pada cara membuat konten yang relevan dan bernilai untuk menarik, melibatkan, dan mempertahankan audiens.",
+  },
+  {
+    title: "Seni Komunikasi Efektif",
+    number: "620/10/FTH/2024",
+    image: "/13.png",
+    description:
+      "Mempelajari teknik komunikasi interpersonal yang efektif, baik verbal maupun non-verbal, dalam konteks profesional.",
+  },
+  {
+    title: "Business Model Development",
+    number: "614/2/FTH/2024",
+    image: "/14.png",
+    description:
+      "Sertifikat ini membuktikan kemampuan merancang dan mengembangkan model bisnis inovatif yang berkelanjutan.",
+  },
+  {
+    title: "Analytics and Data-Driven Marketing",
+    number: "613/3/FTH/2024",
+    image: "/15.png",
+    description:
+      "Menunjukkan kompetensi dalam menganalisis data pemasaran untuk mengambil keputusan strategis berbasis insight.",
+  },
+  {
+    title: "Product Marketing",
+    number: "612/15/FTH/2024",
+    image: "/16.png",
+    description:
+      "Fokus pada strategi peluncuran produk, positioning, dan komunikasi nilai produk untuk pasar sasaran.",
+  },
+  {
+    title: "Introduction to Digital Marketing",
+    number: "611/12/FTH/2024",
+    image: "/4.png",
+    description:
+      "Sebagai pengantar dunia pemasaran digital, sertifikat ini mencakup overview kanal digital, strategi dasar, dan tren industri.",
+  },
+];
+
+const PROJECTS = [
+  {
+    title: "JuangDev — Studio Web & Produk Digital Boilerplate",
+    domain: "juangdev.my.id",
+    image: "/projek/juangdev.my.id.png",
+    description:
+      "Platform usaha freelance mandiri saya di bidang studio pengembangan web dan penjualan produk digital. Di dalamnya tersedia 10+ produk digital berupa template boilerplate website siap pakai dalam berbagai kategori (Landing Page, Company Profile, E-Commerce, POS Kasir, hingga Sistem Informasi) untuk membantu UMKM, startup, dan pelaku bisnis memiliki website profesional secara cepat dan efisien.",
+    features: [
+      "Platform usaha freelance mandiri studio pengembangan web",
+      "Tersedia 10+ produk digital template boilerplate siap pakai",
+      "Layanan pengembangan aplikasi web kustom & konsultasi proyek",
+      "Integrasi Payment Gateway (Midtrans/Xendit) & notifikasi WhatsApp",
+    ],
+    tech: ["Laravel", "Blade", "Tailwind CSS", "Alpine.js", "MySQL"],
+    link: "https://juangdev.my.id",
+  },
+  {
+    title: "NoraPadel — Platform E-Commerce Spesialis Padel",
+    domain: "norapadel.com",
+    image: "/projek/norapadel.com.png",
+    description:
+      "Platform e-commerce resmi PT Nora Active Indonesia untuk penjualan raket, sepatu, tas, dan perlengkapan olahraga padel original dari berbagai brand global ternama dengan pengalaman belanja modern dan cepat.",
+    features: [
+      "Proyek platform e-commerce resmi dari PT Nora Active Indonesia",
+      "Fitur cerdas AI Racket Finder untuk rekomendasi raket sesuai profil pemain",
+      "Katalog produk multi-brand dengan filter kategori, harga, dan pencarian cepat",
+      "Dukungan multi-bahasa (Indonesia & Inggris) serta konsultasi ahli padel",
+    ],
+    tech: ["PHP", "Laravel", "Blade", "Tailwind CSS", "MySQL", "REST API"],
+    link: "https://norapadel.com",
+  },
+  {
+    title: "LeadMaps BI — Business Lead Scraper & Market Intelligence",
+    domain: "scraping.juangdev.my.id",
+    image: "/projek/scraping.juangdev.my.id.png",
+    description:
+      "Produk SaaS intelijen bisnis dan otomasi lead generation buatan JuangDev yang memetakan ribuan bisnis lokal di Google Maps (seperti klinik, restoran, kafe, salon, dan UMKM) yang belum memiliki website untuk mempermudah penawaran solusi digital.",
+    features: [
+      "Produk SaaS intelijen pasar & scraping Google Maps buatan JuangDev",
+      "Fitur otomatis No-Website Hunter & pemetaan prospek B2B potensial",
+      "Dashboard analitik prospek real-time & manajemen pipeline outreach WhatsApp",
+      "Manajemen paket berlangganan (Plan & Kasir), API Key, dan multi-pengguna",
+    ],
+    tech: ["Laravel", "Tailwind CSS", "JavaScript", "REST API", "MySQL"],
+    link: "https://scraping.juangdev.my.id",
+  },
+  {
+    title: "Warkasir — Sistem Kasir (POS) & Self-Order QR Multi-Kedai",
+    domain: "warkasir.juangdev.my.id",
+    image: "/projek/warkasir.juangdev.my.id.png",
+    description:
+      "Produk SaaS sistem kasir modern (Point of Sale) berlangganan buatan JuangDev untuk kafe, warung makan, dan bisnis kuliner multi-kedai. Memungkinkan pelanggan memesan serta membayar mandiri langsung dari meja via scan QR Code tanpa antre dan tanpa instal aplikasi.",
+    features: [
+      "Produk SaaS kasir POS & self-order multi-kedai buatan JuangDev",
+      "Pemesanan mandiri (Self-Order) melalui scan QR Code di setiap meja",
+      "Integrasi pembayaran digital QRIS otomatis & manajemen transaksi kasir",
+      "Notifikasi pesanan otomatis langsung ke WhatsApp kasir dan pelanggan",
+    ],
+    tech: ["Laravel", "Blade", "Tailwind CSS", "QRIS Payment", "WhatsApp API"],
+    link: "https://warkasir.juangdev.my.id",
+  },
+  {
+    title: "Catatanku — Doodle Workspace & Manajemen Tugas",
+    domain: "catatanku.juangdev.my.id",
+    image: "/projek/catatanku.juangdev.my.id.png",
+    description:
+      "Produk web ruang kerja digital kreatif buatan JuangDev bergaya ilustrasi doodle (Neo-Brutalism) untuk mengelola checklist harian, memantau tenggat waktu (deadline), menyusun board pekerjaan, serta mencatat wishlist dan target impian dengan antarmuka yang ceria.",
+    features: [
+      "Produk workspace digital & to-do list buatan JuangDev",
+      "Manajemen multi-board tugas interaktif & pemantauan tugas overdue",
+      "Kalender agenda terintegrasi untuk penjadwalan target harian dan mingguan",
+      "Sistem pengingat alarm & Web Push Notification otomatis",
+    ],
+    tech: ["Laravel", "Blade", "Tailwind CSS", "Alpine.js", "Web Push API"],
+    link: "https://catatanku.juangdev.my.id",
+  },
+  {
+    title: "Kedai Printingku — E-Commerce Digital & Offset Printing",
+    domain: "kedaiprintingku.id",
+    image: "/projek/kedaiprintingku.id.png",
+    description:
+      "Proyek platform e-commerce percetakan digital dan offset yang dikembangkan saat bekerja di PT Andidev, memudahkan pelanggan memesan jasa cetak banner, stiker vinyl, kaos DTF, hingga merchandise dengan kalkulator estimasi harga dan pelacakan pesanan real-time.",
+    features: [
+      "Proyek platform e-commerce percetakan dari PT Andidev",
+      "Kalkulator estimasi harga cetak otomatis berdasarkan ukuran & spesifikasi bahan",
+      "Fitur pelacakan status pesanan (Lacak Pesanan) secara real-time",
+      "Katalog produk terstruktur dengan integrasi konsultasi desain via WhatsApp",
+    ],
+    tech: ["Laravel", "Blade", "Tailwind CSS", "MySQL", "WhatsApp Integration"],
+    link: "https://kedaiprintingku.id",
+  },
+  {
+    title: "Leo Printing — Katalog & Kalkulasi Percetakan Online",
+    domain: "leoprinting.juangdev.my.id",
+    image: "/projek/leoprinting.juangdev.my.id.png",
+    description:
+      "Proyek aplikasi web percetakan yang dikembangkan saat bekerja di PT Andidev, menghadirkan solusi pemesanan cepat dan berkualitas untuk roll-up banner, x-banner, spanduk, stiker, kaos custom, kartu nama, brosur, hingga merchandise dengan kalkulasi harga otomatis.",
+    features: [
+      "Proyek pengembangan aplikasi web percetakan dari PT Andidev",
+      "Kalkulasi harga otomatis sesuai spesifikasi cetak dan kuantitas pesanan",
+      "Navigasi cepat berbasis kategori produk, pencarian instan, dan keranjang belanja",
+      "Banner kampanye promo dinamis & tombol konsultasi cepat WhatsApp",
+    ],
+    tech: ["Laravel", "Blade", "Tailwind CSS", "JavaScript", "MySQL"],
+    link: "https://leoprinting.juangdev.my.id",
+  },
+  {
+    title: "Innerbeauty — E-Commerce Skincare, Nail Art & Kosmetik",
+    domain: "innerbeauty.id",
+    image: "/projek/innerbeauty.id.png",
+    description:
+      "Platform e-commerce kecantikan dan perawatan kulit dari PT Nora Active Indonesia, menyediakan koleksi nail art, kutek gel, skincare, dan kosmetik premium original dengan desain antarmuka elegan serta pengalaman belanja yang aman.",
+    features: [
+      "Proyek toko online kecantikan & skincare dari PT Nora Active Indonesia",
+      "Katalog produk kecantikan berdasarkan kategori, brand, dan New Arrivals",
+      "Dukungan fitur Wishlist, keranjang belanja, dan riwayat pesanan",
+      "Pengaturan multi-bahasa (ID/EN) serta kustomisasi tampilan tema",
+    ],
+    tech: ["Laravel", "Blade", "Tailwind CSS", "MySQL", "JavaScript"],
+    link: "https://innerbeauty.id",
+  },
+  {
+    title: "Gridline Digital — Website Agensi Digital & Pemasaran",
+    domain: "gridlinedigital.site",
+    image: "/projek/gridlinedigital.site.png",
+    description:
+      "Website company profile modern dari PT Nora Active Indonesia bertema dark-futuristic untuk agensi layanan pembuatan website, aplikasi mobile, optimasi SEO, e-commerce, dan manajemen media sosial yang berfokus pada pertumbuhan bisnis klien.",
+    features: [
+      "Proyek website company profile agensi dari PT Nora Active Indonesia",
+      "Showcase layanan lengkap (Landing Page, Web E-Commerce, SEO, Social Media)",
+      "Halaman portofolio hasil kerja, daftar paket harga, dan artikel edukasi",
+      "Alur penjadwalan konsultasi gratis (Free Consultation) bagi calon klien",
+    ],
+    tech: ["Laravel", "Tailwind CSS", "JavaScript", "SEO Optimization"],
+    link: "https://gridlinedigital.site",
+  },
+  {
+    title: "Kriptastic — E-Commerce & Pemesanan Camilan Sehat",
+    domain: "kriptastic.my.id",
+    image: "/projek/kriptaastic.my.id.png",
+    description:
+      "Platform e-commerce pemesanan camilan sehat buatan JuangDev untuk produk keripik lezat berbahan dasar sayur pakcoy, protein tahu, dan nori seaweed. Dirancang dengan visual segar dan alur checkout instan via WhatsApp.",
+    features: [
+      "Platform e-commerce produk camilan sehat buatan JuangDev",
+      "Highlight komposisi bahan sehat & informasi keunggulan nutrisi produk",
+      "Alur checkout pemesanan langsung terhubung ke WhatsApp",
+      "Fitur mini-game interaktif di dalam website untuk meningkatkan engagement",
+    ],
+    tech: ["HTML5", "Tailwind CSS", "JavaScript", "Interactive UI"],
+    link: "https://kriptastic.my.id",
+  },
+];
+
+const ACTIVITIES = [
+  {
+    id: "weza-sprint",
+    title: "Sesi Sprint Review & Kolaborasi Developer",
+    organization: "PT Weza Group",
+    category: "Kolaborasi Tim",
+    date: "2025",
+    image: "/dokumentasi/pt-weza.jpeg",
+    description:
+      "Dokumentasi sesi sprint review, diskusi arsitektur kode aplikasi web internal, dan sinkronisasi backlog GitHub bersama tim developer saat program magang di PT Weza Group.",
+    highlights: ["Sprint Review", "Diskusi Arsitektur Kode", "On-site Sidoarjo"],
+  },
+  {
+    id: "andidev-standup",
+    title: "Daily Standup & Koordinasi Proyek Daring",
+    organization: "PT Andidev",
+    category: "Meeting & Standup",
+    date: "2026",
+    image: "/dokumentasi/pt-andidev.jpeg",
+    description:
+      "Koordinasi rutin jarak jauh (remote meeting) via Google Meet bersama tim developer dan desainer PT Andidev untuk sinkronisasi progres fitur aplikasi web, review desain, dan jadwal deployment.",
+    highlights: ["Google Meet", "Remote Standup", "Sinkronisasi Fitur Klien"],
+  },
+  {
+    id: "nora-coding",
+    title: "Pengembangan Backend & Pengujian Kode E-Commerce",
+    organization: "PT Nora Active Indonesia",
+    category: "Sesi Coding",
+    date: "2026",
+    image: "/dokumentasi/pt-nora.jpeg",
+    description:
+      "Suasana pengerjaan fitur backend, perancangan database seeder, dan pengujian unit test (PHPUnit) saat mengembangkan platform e-commerce norapadel.com menggunakan framework Laravel.",
+    highlights: ["Laravel & PHPUnit", "Backend Testing", "E-Commerce NoraPadel"],
+  },
+  {
+    id: "andidev-websekolah",
+    title: "Implementasi & Preview Web Profil Sekolah",
+    organization: "PT Andidev",
+    category: "Pengembangan Web",
+    date: "2026",
+    image: "/dokumentasi/web-sekolah-andidev.png",
+    description:
+      "Dokumentasi implementasi website profil sekolah modern (Sekolah Alam An Naba) di PT Andidev, mencakup tampilan landing page responsif, katalog program unggulan, dan alur pendaftaran PPDB daring.",
+    highlights: ["Demo Web Sekolah", "Sistem PPDB Online", "Desain Responsif"],
+  },
+  {
+    id: "juangdev-arkha",
+    title: "Perancangan UI/UX Multi-Device Arkha Properti",
+    organization: "JuangDev",
+    category: "Desain UI/UX",
+    date: "2026",
+    image: "/dokumentasi/arkha-properti.jpeg",
+    description:
+      "Dokumentasi hasil perancangan UI/UX lintas perangkat (MacBook Air & Smartphone) untuk platform konsultan dan pengembang properti mewah Arkha Properti yang dikerjakan di studio JuangDev.",
+    highlights: ["Multi-Device Mockup", "UI/UX Konsultan Properti", "Desain Responsif"],
+  },
+  {
+    id: "juangdev-fifashoes",
+    title: "Showcase UI/UX Toko Online Sepatu (Fifa Shoes)",
+    organization: "JuangDev",
+    category: "Desain UI/UX",
+    date: "2026",
+    image: "/dokumentasi/fifa-shoes.jpeg",
+    description:
+      "Dokumentasi konsep desain prototipe e-commerce sepatu modern dengan katalog interaktif, filter kategori produk, dan alur checkout ramah pengguna untuk desktop, tablet, dan mobile.",
+    highlights: ["E-Commerce Footwear", "Tablet & Mobile Layout", "Katalog Interaktif"],
+  },
+  {
+    id: "juangdev-fifabag",
+    title: "Perancangan Antarmuka E-Commerce Produk Tas (Fifa Bag)",
+    organization: "JuangDev",
+    category: "Desain UI/UX",
+    date: "2026",
+    image: "/dokumentasi/fifa-bag.jpeg",
+    description:
+      "Dokumentasi perancangan antarmuka e-commerce tas pria & wanita di JuangDev dengan fokus pada tata letak visual minimalis, fotografi produk estetis, dan kenyamanan alur keranjang belanja.",
+    highlights: ["E-Commerce Bags", "Minimalist Checkout", "UI/UX Showcase"],
+  },
+];
+
+const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark }) => {
+  const [selectedDoc, setSelectedDoc] = useState<(typeof ACTIVITIES)[0] | null>(null);
+  const [selectedCert, setSelectedCert] = useState<(typeof CERTIFICATES)[0] | null>(null);
+  const [docFilter, setDocFilter] = useState("Semua");
+
   const textColor = isDark ? "text-white" : "text-gray-900";
   const secondaryTextColor = isDark ? "text-gray-300" : "text-gray-600";
   const accentColor = isDark ? "text-blue-400" : "text-blue-600";
-  const cardBg = isDark ? "bg-gray-800/50" : "bg-white/50";
-  const borderColor = isDark ? "border-gray-700/50" : "border-gray-200/50";
-
-  const projects = [
-    {
-      title: "AI-Powered Portfolio Optimizer",
-      description:
-        "Machine learning tool that analyzes and optimizes investment portfolios using real-time market data and predictive algorithms.",
-      tech: ["Python", "TensorFlow", "React", "Node.js", "PostgreSQL"],
-      link: "#",
-      stars: 234,
-      image:
-        "https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=400",
-    },
-    {
-      title: "Real-time Chat Application",
-      description:
-        "Scalable chat application with end-to-end encryption, multimedia support, and real-time collaboration features.",
-      tech: ["React", "Socket.io", "MongoDB", "Express", "Redis"],
-      link: "#",
-      stars: 189,
-      image:
-        "https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=400",
-    },
-    {
-      title: "E-commerce Analytics Dashboard",
-      description:
-        "Comprehensive analytics platform for e-commerce businesses with predictive insights and automated reporting.",
-      tech: ["Vue.js", "D3.js", "PostgreSQL", "Docker", "AWS"],
-      link: "#",
-      stars: 156,
-      image:
-        "https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=400",
-    },
-  ];
-
-  const skills = [
-    {
-      category: "Frontend Development",
-      items: [
-        "React",
-        "Vue.js",
-        "TypeScript",
-        "Tailwind CSS",
-        "Next.js",
-        "Svelte",
-      ],
-      icon: Globe,
-      level: 95,
-    },
-    {
-      category: "Backend Development",
-      items: [
-        "Node.js",
-        "Python",
-        "PostgreSQL",
-        "MongoDB",
-        "Express",
-        "FastAPI",
-      ],
-      icon: Database,
-      level: 90,
-    },
-    {
-      category: "DevOps & Tools",
-      items: ["Docker", "Git", "AWS", "Kubernetes", "CI/CD", "Terraform"],
-      icon: Code,
-      level: 85,
-    },
-    {
-      category: "Mobile Development",
-      items: ["React Native", "Flutter", "iOS", "Android", "Expo"],
-      icon: Smartphone,
-      level: 75,
-    },
-  ];
+  const cardBg = isDark ? "bg-gray-800/70" : "bg-gray-50/90";
+  const borderColor = isDark ? "border-gray-700/60" : "border-gray-200/80";
 
   switch (app) {
     case "home":
@@ -125,16 +521,16 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
               M Syifaul Anam
             </h1>
             <p className={`text-2xl font-light ${secondaryTextColor} mb-8`}>
-              Student
+              Full Stack Developer
             </p>
             <div className="flex items-center justify-center space-x-8 mb-8">
               <div className={`flex items-center ${secondaryTextColor}`}>
                 <MapPin size={18} className="mr-2" />
-                Surabaya, Jawa Timur
+                Sidoarjo, Jawa Timur
               </div>
               <div className={`flex items-center ${secondaryTextColor}`}>
                 <Calendar size={18} className="mr-2" />
-                Available for work
+                Tersedia untuk bekerja
               </div>
             </div>
 
@@ -159,51 +555,43 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
               </a>
 
               <a
-                href="syifakul.anm@gmail.com"
+                href="mailto:syifakul.anm@gmail.com"
                 className={`p-3 rounded-full transition-all duration-200 hover:scale-110 ${cardBg} border ${borderColor}`}
               >
                 <Mail size={20} className={accentColor} />
               </a>
 
               <a
-                href="/M SYIFAUL ANAM (CV-ATS) (1).pdf"
-                download
+                href="/CV_M_Syifaul_Anam.pdf"
+                download="CV_M_Syifaul_Anam.pdf"
                 className="px-4 py-2 rounded-full transition-all duration-200 hover:scale-105 bg-blue-600 hover:bg-blue-700 text-white flex items-center space-x-2"
               >
                 <Download size={16} />
-                <span>Download CV</span>
+                <span>Unduh CV</span>
               </a>
             </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            <div
-              className={`p-6 rounded-2xl ${cardBg} border ${borderColor} backdrop-blur-sm`}
-            >
+            <div className={`p-6 rounded-2xl ${cardBg} border ${borderColor}`}>
               <h2 className={`text-2xl font-semibold mb-4 ${textColor}`}>
-                About Me
+                Tentang Saya
               </h2>
               <p
                 className={`text-justify ${secondaryTextColor} leading-relaxed mb-4`}
               >
-                I'm Syifaul Anam, an Informatics student based in Sidoarjo. I'm
-                passionate about front-end development and user interface
-                design.
+                Saya Syifaul Anam, seorang Full Stack Developer berbasis di Sidoarjo dengan fokus pada pengembangan aplikasi web end-to-end menggunakan PHP/Laravel, MySQL, Tailwind CSS, dan JavaScript.
               </p>
               <p
                 className={`text-justify ${secondaryTextColor} leading-relaxed`}
               >
-                With a strong interest in creating responsive, accessible, and
-                interactive web applications, I strive to build clean, efficient
-                code and engaging digital experiences.
+                Berpengalaman bekerja sebagai Full Stack Developer di PT Andidev (Oktober 2026 – Sekarang), PT Nora Active Indonesia, PT Weza Group, serta pendiri studio web JuangDev. Terbiasa menangani integrasi API, payment gateway, arsitektur database, hingga deployment sistem siap pakai.
               </p>
             </div>
 
-            <div
-              className={`p-6 rounded-2xl ${cardBg} border ${borderColor} backdrop-blur-sm`}
-            >
+            <div className={`p-6 rounded-2xl ${cardBg} border ${borderColor}`}>
               <h2 className={`text-2xl font-semibold mb-6 ${textColor}`}>
-                Quick Stats
+                Statistik Singkat
               </h2>
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center">
@@ -211,7 +599,15 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
                     10+
                   </div>
                   <div className={`text-sm ${secondaryTextColor}`}>
-                    Projects
+                    Proyek Web
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className={`text-3xl font-bold ${accentColor} mb-1`}>
+                    Full Stack
+                  </div>
+                  <div className={`text-sm ${secondaryTextColor}`}>
+                    Laravel &amp; REST API
                   </div>
                 </div>
                 <div className="text-center">
@@ -219,22 +615,16 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
                     3+
                   </div>
                   <div className={`text-sm ${secondaryTextColor}`}>
-                    Years Exp
+                    Perusahaan &amp; Studio
                   </div>
                 </div>
                 <div className="text-center">
                   <div className={`text-3xl font-bold ${accentColor} mb-1`}>
-                    30+
+                    S1
                   </div>
                   <div className={`text-sm ${secondaryTextColor}`}>
-                    Happy Clients
+                    Informatika
                   </div>
-                </div>
-                <div className="text-center">
-                  <div className={`text-3xl font-bold ${accentColor} mb-1`}>
-                    ∞
-                  </div>
-                  <div className={`text-sm ${secondaryTextColor}`}>Coffee</div>
                 </div>
               </div>
             </div>
@@ -251,164 +641,391 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
               '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
           }}
         >
-          <h1 className={`text-4xl font-light mb-8 ${textColor}`}>About Me</h1>
+          <h1 className={`text-4xl font-light mb-8 ${textColor}`}>
+            Tentang Saya
+          </h1>
 
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             <div className="md:col-span-2">
               <h2 className={`text-2xl font-semibold mb-6 ${textColor}`}>
-                My Journey
+                Perjalanan &amp; Latar Belakang
               </h2>
-              <div className="space-y-6">
+              <div className="space-y-5">
                 <p
-                  className={`text-justify ${secondaryTextColor} leading-relaxed text-lg`}
+                  className={`text-justify ${secondaryTextColor} leading-relaxed text-base md:text-lg`}
                 >
-                  My journey into web development began during my Informatics
-                  studies in Sidoarjo. What started as a curiosity about how
-                  user interfaces work quickly turned into a deep passion for
-                  building meaningful and interactive digital experiences.
+                  Saya adalah lulusan S1 Informatika dari Universitas Nahdlatul Ulama Sidoarjo (2022 – 2026) dan seorang Full Stack Developer dengan fokus utama pada perancangan dan pembangunan aplikasi web end-to-end menggunakan PHP/Laravel, MySQL, REST API, Tailwind CSS, dan JavaScript.
                 </p>
                 <p
-                  className={`text-justify ${secondaryTextColor} leading-relaxed text-lg`}
+                  className={`text-justify ${secondaryTextColor} leading-relaxed text-base md:text-lg`}
                 >
-                  I'm especially drawn to front-end development and UI
-                  design—creating clean, responsive, and accessible interfaces
-                  that are both visually appealing and user-friendly. I take
-                  pride in building designs that not only look great but also
-                  deliver intuitive experiences.
+                  Memiliki pengalaman kerja profesional sebagai Full Stack Developer di PT Andidev (Oktober 2026 – Sekarang) dan PT Nora Active Indonesia (norapadel.com), magang di PT Weza Group, serta pendiri studio web JuangDev (juangdev.my.id) yang merancang dan menjual template boilerplate website siap pakai.
                 </p>
                 <p
-                  className={`text-justify ${secondaryTextColor} leading-relaxed text-lg`}
+                  className={`text-justify ${secondaryTextColor} leading-relaxed text-base md:text-lg`}
                 >
-                  For me, every project is a new opportunity to learn, grow, and
-                  solve real-world problems through code. I'm committed to
-                  continuously improving my skills and contributing to a better,
-                  more thoughtful web.
+                  Terbiasa menangani seluruh siklus proyek: dari konsultasi kebutuhan klien, perancangan database, integrasi payment gateway dan WhatsApp, hingga deployment ke server produksi dengan fokus pada performa, keamanan, dan pengalaman pengguna yang optimal.
                 </p>
               </div>
             </div>
 
-            <div
-              className={`p-6 rounded-2xl ${cardBg} border ${borderColor} backdrop-blur-sm h-fit`}
-            >
-              <h2 className={`text-xl font-semibold mb-4 ${textColor}`}>
-                Core Values
-              </h2>
-              <ul className={`space-y-3 ${secondaryTextColor}`}>
-                <li className="flex items-center">
-                  <span className="text-2xl mr-3">🎯</span>
-                  User-centered design
-                </li>
-                <li className="flex items-center">
-                  <span className="text-2xl mr-3">📱</span>
-                  Mobile-first approach
-                </li>
-                <li className="flex items-center">
-                  <span className="text-2xl mr-3">🚀</span>
-                  Performance optimization
-                </li>
-                <li className="flex items-center">
-                  <span className="text-2xl mr-3">🔄</span>
-                  Continuous learning
-                </li>
-                <li className="flex items-center">
-                  <span className="text-2xl mr-3">🤝</span>
-                  Collaboration
-                </li>
-                <li className="flex items-center">
-                  <span className="text-2xl mr-3">♿</span>
-                  Accessibility for all
-                </li>
-              </ul>
+            <div className="space-y-6">
+              <div
+                className={`p-6 rounded-2xl ${cardBg} border ${borderColor} h-fit`}
+              >
+                <h2 className={`text-xl font-semibold mb-4 ${textColor}`}>
+                  Pendidikan
+                </h2>
+                <div className="flex items-start space-x-3">
+                  <GraduationCap className={`${accentColor} mt-1 shrink-0`} size={22} />
+                  <div>
+                    <h3 className={`font-semibold ${textColor}`}>
+                      S1 Informatika
+                    </h3>
+                    <p className={`text-sm ${accentColor}`}>
+                      Universitas Nahdlatul Ulama Sidoarjo
+                    </p>
+                    <p className={`text-xs mt-1 ${secondaryTextColor}`}>
+                      2022 – 2026
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                className={`p-6 rounded-2xl ${cardBg} border ${borderColor} h-fit`}
+              >
+                <h2 className={`text-xl font-semibold mb-4 ${textColor}`}>
+                  Fokus &amp; Nilai Kerja
+                </h2>
+                <ul className={`space-y-3 text-sm ${secondaryTextColor}`}>
+                  <li className="flex items-center space-x-2.5">
+                    <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
+                    <span>Pengembangan Web End-to-End</span>
+                  </li>
+                  <li className="flex items-center space-x-2.5">
+                    <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
+                    <span>Full Stack Laravel &amp; REST API</span>
+                  </li>
+                  <li className="flex items-center space-x-2.5">
+                    <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
+                    <span>Integrasi API &amp; Payment Gateway</span>
+                  </li>
+                  <li className="flex items-center space-x-2.5">
+                    <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
+                    <span>Desain Responsif &amp; Ramah Pengguna</span>
+                  </li>
+                  <li className="flex items-center space-x-2.5">
+                    <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
+                    <span>Komunikasi Aktif &amp; Tepat Deadline</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
 
           <div>
             <h2 className={`text-2xl font-semibold mb-8 ${textColor}`}>
-              My Experience
+              Pengalaman Kerja &amp; Organisasi
             </h2>
-            <div className="space-y-8">
-              {/* Project 1 */}
+            <div className="space-y-6">
+              {/* MacBook Window 1 - PT Andidev */}
               <div
-                className={`p-6 rounded-2xl ${cardBg} border ${borderColor} backdrop-blur-sm border-l-4 border-l-blue-500`}
+                className={`perf-card rounded-2xl border ${borderColor} ${cardBg} shadow-sm overflow-hidden transition-all duration-200 hover:shadow-md`}
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h3 className={`text-xl font-semibold ${textColor}`}>
-                      Modern E-Commerce Platform
-                    </h3>
-                    <p className={`${accentColor} font-medium`}>
-                      Personal Project • 2025
-                    </p>
-                  </div>
+                <div
+                  className={`flex items-center justify-between px-4 py-2.5 border-b ${borderColor} ${isDark ? "bg-gray-800/80" : "bg-gray-100/80"
+                    }`}
+                >
                   <div className="flex items-center space-x-2">
-                    <Users size={16} className={secondaryTextColor} />
-                    <span className={`text-sm ${secondaryTextColor}`}>
-                      Solo Developer
+                    <div className="flex space-x-1.5">
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
+                    </div>
+                    <span
+                      className={`text-xs font-mono ml-2 ${secondaryTextColor}`}
+                    >
+                      PT Andidev — Full Stack Developer
                     </span>
                   </div>
+                  <span
+                    className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${isDark
+                      ? "bg-gray-700/80 text-gray-300"
+                      : "bg-white text-gray-700 border border-gray-200"
+                      }`}
+                  >
+                    Oktober 2026 – Sekarang
+                  </span>
                 </div>
-                <p className={`${secondaryTextColor} leading-relaxed`}>
-                  A full-stack online store built using React and Node.js.
-                  Includes features like product management, shopping cart, and
-                  secure checkout process. Designed with responsiveness and
-                  performance in mind.
-                </p>
+                <div className="p-5 md:p-6">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <div>
+                      <h3 className={`text-xl font-semibold ${textColor}`}>
+                        Full Stack Developer
+                      </h3>
+                      <p className={`${accentColor} text-sm font-medium mt-0.5`}>
+                        PT Andidev • Parttime
+                      </p>
+                    </div>
+                    <div className="flex items-center space-x-1.5 text-xs text-gray-500">
+                      <MapPin size={13} />
+                      <span>Remote</span>
+                    </div>
+                  </div>
+                  <ul className={`list-disc list-inside space-y-1.5 text-sm ${secondaryTextColor}`}>
+                    <li>
+                      Mengembangkan dan memelihara aplikasi web skala enterprise dan kebutuhan klien secara end-to-end menggunakan PHP/Laravel dan MySQL.
+                    </li>
+                    <li>
+                      Merancang arsitektur database yang efisien, RESTful API, serta fitur autentikasi dan manajemen hak akses pengguna.
+                    </li>
+                    <li>
+                      Membangun antarmuka web modern, responsif, dan interaktif menggunakan Tailwind CSS dan JavaScript.
+                    </li>
+                    <li>
+                      Berkolaborasi aktif dengan tim pengembang untuk memastikan kode bersih, performa optimal, dan stabilitas aplikasi.
+                    </li>
+                  </ul>
+                </div>
               </div>
 
-              {/* Project 2 */}
+              {/* MacBook Window 2 - PT Nora Active Indonesia */}
               <div
-                className={`p-6 rounded-2xl ${cardBg} border ${borderColor} backdrop-blur-sm border-l-4 border-l-green-500`}
+                className={`perf-card rounded-2xl border ${borderColor} ${cardBg} shadow-sm overflow-hidden transition-all duration-200 hover:shadow-md`}
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h3 className={`text-xl font-semibold ${textColor}`}>
-                      Employee Attendance System
-                    </h3>
-                    <p className={`${accentColor} font-medium`}>
-                      Personal Project • 2025
-                    </p>
-                  </div>
+                <div
+                  className={`flex items-center justify-between px-4 py-2.5 border-b ${borderColor} ${isDark ? "bg-gray-800/80" : "bg-gray-100/80"
+                    }`}
+                >
                   <div className="flex items-center space-x-2">
-                    <Award size={16} className={secondaryTextColor} />
-                    <span className={`text-sm ${secondaryTextColor}`}>
-                      Built from Scratch
+                    <div className="flex space-x-1.5">
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
+                    </div>
+                    <span
+                      className={`text-xs font-mono ml-2 ${secondaryTextColor}`}
+                    >
+                      PT Nora Active Indonesia — Full Stack Developer
                     </span>
                   </div>
+                  <span
+                    className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${isDark
+                      ? "bg-gray-700/80 text-gray-300"
+                      : "bg-white text-gray-700 border border-gray-200"
+                      }`}
+                  >
+                    2026
+                  </span>
                 </div>
-                <p className={`${secondaryTextColor} leading-relaxed`}>
-                  A web-based application to manage employee attendance and
-                  generate daily reports. Developed using modern web
-                  technologies with a focus on simplicity and accuracy in data
-                  processing.
-                </p>
+                <div className="p-5 md:p-6">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <div>
+                      <h3 className={`text-xl font-semibold ${textColor}`}>
+                        Full Stack Developer
+                      </h3>
+                      <p className={`${accentColor} text-sm font-medium mt-0.5`}>
+                        PT Nora Active Indonesia • Fulltime
+                      </p>
+                    </div>
+                    <div className="flex items-center space-x-1.5 text-xs text-gray-500">
+                      <MapPin size={13} />
+                      <span>On-site / Surabaya</span>
+                    </div>
+                  </div>
+                  <ul className={`list-disc list-inside space-y-1.5 text-sm ${secondaryTextColor}`}>
+                    <li>
+                      Mengembangkan platform e-commerce norapadel.com untuk penjualan produk olahraga padel menggunakan PHP/Laravel.
+                    </li>
+                    <li>
+                      Membangun fitur CRUD, autentikasi pengguna, dan pengelolaan data produk untuk mendukung operasional toko online.
+                    </li>
+                    <li>
+                      Melakukan integrasi API serta pengolahan data untuk mendukung fungsionalitas aplikasi secara menyeluruh.
+                    </li>
+                    <li>
+                      Berkolaborasi dengan tim internal untuk memelihara dan mengembangkan aplikasi sesuai kebutuhan bisnis perusahaan.
+                    </li>
+                  </ul>
+                </div>
               </div>
 
-              {/* Project 3 */}
+              {/* MacBook Window 3 - JuangDev */}
               <div
-                className={`p-6 rounded-2xl ${cardBg} border ${borderColor} backdrop-blur-sm border-l-4 border-l-purple-500`}
+                className={`perf-card rounded-2xl border ${borderColor} ${cardBg} shadow-sm overflow-hidden transition-all duration-200 hover:shadow-md`}
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h3 className={`text-xl font-semibold ${textColor}`}>
-                      Online Store Prototype
-                    </h3>
-                    <p className={`${accentColor} font-medium`}>
-                      Personal Project • 2025
-                    </p>
-                  </div>
+                <div
+                  className={`flex items-center justify-between px-4 py-2.5 border-b ${borderColor} ${isDark ? "bg-gray-800/80" : "bg-gray-100/80"
+                    }`}
+                >
                   <div className="flex items-center space-x-2">
-                    <Star size={16} className={secondaryTextColor} />
-                    <span className={`text-sm ${secondaryTextColor}`}>
-                      UI/UX Focused
+                    <div className="flex space-x-1.5">
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
+                    </div>
+                    <span
+                      className={`text-xs font-mono ml-2 ${secondaryTextColor}`}
+                    >
+                      JuangDev — Founder &amp; Full Stack Developer
                     </span>
                   </div>
+                  <span
+                    className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${isDark
+                      ? "bg-gray-700/80 text-gray-300"
+                      : "bg-white text-gray-700 border border-gray-200"
+                      }`}
+                  >
+                    2026 – Sekarang
+                  </span>
                 </div>
-                <p className={`${secondaryTextColor} leading-relaxed`}>
-                  A responsive and interactive prototype for an online retail
-                  store. Features a clean product catalog, shopping cart
-                  interface, and smooth navigation—designed with user experience
-                  as the main priority.
-                </p>
+                <div className="p-5 md:p-6">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <div>
+                      <h3 className={`text-xl font-semibold ${textColor}`}>
+                        Founder &amp; Full Stack Developer
+                      </h3>
+                      <p className={`${accentColor} text-sm font-medium mt-0.5`}>
+                        JuangDev (juangdev.my.id) • Usaha Freelance Mandiri
+                      </p>
+                    </div>
+                    <div className="flex items-center space-x-1.5 text-xs text-gray-500">
+                      <MapPin size={13} />
+                      <span>Remote / Sidoarjo</span>
+                    </div>
+                  </div>
+                  <ul className={`list-disc list-inside space-y-1.5 text-sm ${secondaryTextColor}`}>
+                    <li>
+                      Mendirikan dan menjalankan studio pengembangan web JuangDev sebagai platform usaha freelance mandiri.
+                    </li>
+                    <li>
+                      Merancang dan menjual 10+ produk digital berupa template boilerplate website siap pakai (Landing Page, Company Profile, E-Commerce, POS Kasir, Sistem Informasi) menggunakan Laravel, Blade, dan Tailwind CSS.
+                    </li>
+                    <li>
+                      Menangani seluruh siklus proyek klien: konsultasi kebutuhan, pengembangan fitur kustom (payment gateway, integrasi WhatsApp, dashboard admin), hingga deployment dan dukungan purna jual.
+                    </li>
+                    <li>
+                      Menyelesaikan proyek sesuai deadline melalui komunikasi aktif dan pembaruan progres berkala bersama klien.
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* MacBook Window 4 - PT Weza Group */}
+              <div
+                className={`perf-card rounded-2xl border ${borderColor} ${cardBg} shadow-sm overflow-hidden transition-all duration-200 hover:shadow-md`}
+              >
+                <div
+                  className={`flex items-center justify-between px-4 py-2.5 border-b ${borderColor} ${isDark ? "bg-gray-800/80" : "bg-gray-100/80"
+                    }`}
+                >
+                  <div className="flex items-center space-x-2">
+                    <div className="flex space-x-1.5">
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
+                    </div>
+                    <span
+                      className={`text-xs font-mono ml-2 ${secondaryTextColor}`}
+                    >
+                      PT Weza Group — Web Developer
+                    </span>
+                  </div>
+                  <span
+                    className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${isDark
+                      ? "bg-gray-700/80 text-gray-300"
+                      : "bg-white text-gray-700 border border-gray-200"
+                      }`}
+                  >
+                    2025
+                  </span>
+                </div>
+                <div className="p-5 md:p-6">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <div>
+                      <h3 className={`text-xl font-semibold ${textColor}`}>
+                        Web Developer
+                      </h3>
+                      <p className={`${accentColor} text-sm font-medium mt-0.5`}>
+                        PT Weza Group • Magang
+                      </p>
+                    </div>
+                    <div className="flex items-center space-x-1.5 text-xs text-gray-500">
+                      <MapPin size={13} />
+                      <span>Hybrid / Sidoarjo</span>
+                    </div>
+                  </div>
+                  <ul className={`list-disc list-inside space-y-1.5 text-sm ${secondaryTextColor}`}>
+                    <li>
+                      Mengembangkan dan memelihara aplikasi berbasis web internal perusahaan menggunakan PHP/Laravel selama program magang.
+                    </li>
+                    <li>
+                      Melakukan integrasi API serta pengolahan data untuk mendukung fungsionalitas aplikasi.
+                    </li>
+                    <li>
+                      Mengimplementasikan fitur CRUD dan autentikasi pengguna sesuai kebutuhan proyek yang diberikan.
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* MacBook Window 5 - Organisasi BEM */}
+              <div
+                className={`perf-card rounded-2xl border ${borderColor} ${cardBg} shadow-sm overflow-hidden transition-all duration-200 hover:shadow-md`}
+              >
+                <div
+                  className={`flex items-center justify-between px-4 py-2.5 border-b ${borderColor} ${isDark ? "bg-gray-800/80" : "bg-gray-100/80"
+                    }`}
+                >
+                  <div className="flex items-center space-x-2">
+                    <div className="flex space-x-1.5">
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
+                    </div>
+                    <span
+                      className={`text-xs font-mono ml-2 ${secondaryTextColor}`}
+                    >
+                      BEM Fakultas Ilmu Komputer — Divisi Media
+                    </span>
+                  </div>
+                  <span
+                    className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${isDark
+                      ? "bg-gray-700/80 text-gray-300"
+                      : "bg-white text-gray-700 border border-gray-200"
+                      }`}
+                  >
+                    2024
+                  </span>
+                </div>
+                <div className="p-5 md:p-6">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <div>
+                      <h3 className={`text-xl font-semibold ${textColor}`}>
+                        Anggota Divisi Media
+                      </h3>
+                      <p className={`${accentColor} text-sm font-medium mt-0.5`}>
+                        BEM Fakultas Ilmu Komputer • Organisasi Kampus
+                      </p>
+                    </div>
+                    <div className="flex items-center space-x-1.5 text-xs text-gray-500">
+                      <MapPin size={13} />
+                      <span>Sidoarjo</span>
+                    </div>
+                  </div>
+                  <ul className={`list-disc list-inside space-y-1.5 text-sm ${secondaryTextColor}`}>
+                    <li>
+                      Mendesain konten kreatif untuk media sosial resmi BEM Fakultas Ilmu Komputer.
+                    </li>
+                    <li>
+                      Mengelola dokumentasi dan publikasi berbagai kegiatan kampus.
+                    </li>
+                    <li>
+                      Berkontribusi dalam pembuatan video recap dan perancangan tampilan feed media sosial kampus.
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -425,21 +1042,19 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
           }}
         >
           <h1 className={`text-4xl font-light mb-8 ${textColor}`}>
-            Skills & Expertise
+            Keahlian &amp; Teknologi
           </h1>
 
           <div className="grid md:grid-cols-2 gap-8 mb-12">
-            {skills.map((skillGroup, index) => {
+            {SKILLS.map((skillGroup) => {
               const IconComponent = skillGroup.icon;
               return (
                 <div
                   key={skillGroup.category}
-                  className={`p-6 rounded-2xl ${cardBg} border ${borderColor} backdrop-blur-sm hover:shadow-lg transition-all duration-300`}
+                  className={`p-6 rounded-2xl ${cardBg} border ${borderColor} hover:shadow-lg transition-shadow duration-200`}
                 >
                   <div className="flex items-center mb-6">
-                    <div
-                      className={`p-3 rounded-xl mr-4 bg-gradient-to-br from-blue-500 to-purple-600`}
-                    >
+                    <div className="p-3 rounded-xl mr-4 bg-gradient-to-br from-blue-500 to-purple-600">
                       <IconComponent className="text-white" size={24} />
                     </div>
                     <div>
@@ -448,12 +1063,11 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
                       </h2>
                       <div className="flex items-center mt-1">
                         <div
-                          className={`w-20 h-2 rounded-full ${
-                            isDark ? "bg-gray-700" : "bg-gray-200"
-                          } mr-2`}
+                          className={`w-20 h-2 rounded-full ${isDark ? "bg-gray-700" : "bg-gray-200"
+                            } mr-2`}
                         >
                           <div
-                            className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-1000"
+                            className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full"
                             style={{ width: `${skillGroup.level}%` }}
                           />
                         </div>
@@ -467,11 +1081,10 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
                     {skillGroup.items.map((skill) => (
                       <span
                         key={skill}
-                        className={`px-3 py-1 rounded-full text-sm transition-all duration-200 hover:scale-105 ${
-                          isDark
-                            ? "bg-blue-900/50 text-blue-300 border border-blue-800/50"
-                            : "bg-blue-100 text-blue-800 border border-blue-200"
-                        }`}
+                        className={`px-3 py-1 rounded-full text-sm ${isDark
+                          ? "bg-blue-900/50 text-blue-300 border border-blue-800/50"
+                          : "bg-blue-100 text-blue-800 border border-blue-200"
+                          }`}
                       >
                         {skill}
                       </span>
@@ -482,45 +1095,12 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
             })}
           </div>
 
-          <div
-            className={`p-6 rounded-2xl ${cardBg} border ${borderColor} backdrop-blur-sm`}
-          >
+          <div className={`p-6 rounded-2xl ${cardBg} border ${borderColor}`}>
             <h2 className={`text-2xl font-semibold mb-6 ${textColor}`}>
-              Proficiency Overview
+              Tingkat Penguasaan Keahlian
             </h2>
             <div className="space-y-6">
-              {[
-                {
-                  skill: "JavaScript/TypeScript",
-                  level: 95,
-                  color: "from-yellow-400 to-orange-500",
-                },
-                {
-                  skill: "React/Next.js",
-                  level: 90,
-                  color: "from-blue-400 to-cyan-500",
-                },
-                {
-                  skill: "Node.js/Express",
-                  level: 85,
-                  color: "from-green-400 to-emerald-500",
-                },
-                {
-                  skill: "Database Design",
-                  level: 80,
-                  color: "from-purple-400 to-pink-500",
-                },
-                {
-                  skill: "UI/UX Design",
-                  level: 75,
-                  color: "from-red-400 to-rose-500",
-                },
-                {
-                  skill: "Mobile Development",
-                  level: 70,
-                  color: "from-indigo-400 to-purple-500",
-                },
-              ].map((item) => (
+              {PROFICIENCIES.map((item) => (
                 <div key={item.skill}>
                   <div className="flex justify-between mb-2">
                     <span className={`font-medium ${textColor}`}>
@@ -531,12 +1111,11 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
                     </span>
                   </div>
                   <div
-                    className={`w-full rounded-full h-3 ${
-                      isDark ? "bg-gray-700" : "bg-gray-200"
-                    }`}
+                    className={`w-full rounded-full h-3 ${isDark ? "bg-gray-700" : "bg-gray-200"
+                      }`}
                   >
                     <div
-                      className={`bg-gradient-to-r ${item.color} h-3 rounded-full transition-all duration-1000 shadow-sm`}
+                      className={`bg-gradient-to-r ${item.color} h-3 rounded-full shadow-sm`}
                       style={{ width: `${item.level}%` }}
                     />
                   </div>
@@ -550,169 +1129,61 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
     case "certificates":
       return (
         <div
-          className="p-8"
+          className="p-5 md:p-7"
           style={{
             fontFamily:
               '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
           }}
         >
-          <h1 className={`text-4xl font-light mb-8 ${textColor}`}>
-            📄 Certificates
+          <h1 className={`text-3xl md:text-4xl font-light mb-8 ${textColor}`}>
+            Sertifikat &amp; Pelatihan
           </h1>
 
           <div className="grid gap-6">
-            {[
-              {
-                title: "Specialist Media Social",
-                number: "-",
-                image: "/tumbu.png",
-                description:
-                  "Sertifikat ini membuktikan keahlian dalam merancang, mengelola, dan mengevaluasi strategi media sosial yang efektif untuk meningkatkan brand awareness dan engagement.",
-              },
-              {
-                title: "Digital Marketing",
-                number: "-",
-                image: "/1.png",
-                description:
-                  "Mengenal dasar-dasar pemasaran digital, termasuk strategi online, periklanan, hingga konversi pelanggan dalam ekosistem digital modern.",
-              },
-              {
-                title: "Mastering Capcut",
-                number: "626/25/FTH/2024",
-                image: "/2.png",
-                description:
-                  "Sertifikat ini menunjukkan kemampuan dalam mengedit video kreatif menggunakan Capcut untuk konten digital, termasuk efek, transisi, dan storytelling visual.",
-              },
-              {
-                title: "Digital Advertising menggunakan Meta Ads",
-                number: "625/27/FTH/2024",
-                image: "/3.png",
-                description:
-                  "Mendalami strategi iklan digital melalui platform Meta (Facebook & Instagram Ads), termasuk segmentasi, targeting, dan optimalisasi kampanye.",
-              },
-              {
-                title: "Menyusun CV yang Profesional dan Menunjang Karir",
-                number: "624/6/FTH/2024",
-                image: "/17.png",
-                description:
-                  "Pelatihan ini memberikan panduan praktis untuk membuat CV profesional yang menarik HRD dan relevan dengan kebutuhan industri.",
-              },
-              {
-                title: "Memaksimalkan LinkedIn untuk Peluang Kerja",
-                number: "623/7/FTH/2024",
-                image: "/5.png",
-                description:
-                  "Menjelaskan cara membangun profil LinkedIn yang kuat, memperluas jaringan profesional, dan menarik rekruter melalui strategi konten.",
-              },
-              {
-                title: "Rahasia Sukses dalam Wawancara Kerja",
-                number: "622/8/FTH/2024",
-                image: "/6.png",
-                description:
-                  "Mengajarkan teknik menjawab pertanyaan wawancara, membangun kesan positif, dan mempresentasikan diri secara profesional.",
-              },
-              {
-                title: "Teknik Pembuatan Presentasi yang Memikat",
-                number: "621/9/FTH/2024",
-                image: "/7.png",
-                description:
-                  "Pelatihan ini membahas cara menyusun slide yang menarik, menyampaikan pesan dengan efektif, dan menjaga perhatian audiens.",
-              },
-              {
-                title: "Search Engine Optimization Fundamental",
-                number: "619/23/FTH/2024",
-                image: "/8.png",
-                description:
-                  "Mempelajari dasar-dasar SEO, termasuk optimasi on-page, keyword research, dan peningkatan peringkat di mesin pencari.",
-              },
-              {
-                title: "Customer Segmentation",
-                number: "618/1/FTH/2024",
-                image: "/9.png",
-                description:
-                  "Sertifikat ini menunjukkan pemahaman dalam membagi pasar menjadi segmen yang relevan untuk meningkatkan efektivitas kampanye pemasaran.",
-              },
-              {
-                title: "Digital Marketing Channel",
-                number: "617/4/FTH/2024",
-                image: "/10.png",
-                description:
-                  "Mengenal berbagai kanal digital (email, sosial media, website, dll) dan bagaimana mengelolanya secara terintegrasi.",
-              },
-              {
-                title: "Social Media Marketing",
-                number: "616/17/FTH/2024",
-                image: "/11.png",
-                description:
-                  "Pelatihan dalam strategi pemasaran melalui platform media sosial, mulai dari perencanaan konten hingga analisis performa.",
-              },
-              {
-                title: "Content Marketing",
-                number: "615/5/FTH/2024",
-                image: "/12.png",
-                description:
-                  "Fokus pada cara membuat konten yang relevan dan bernilai untuk menarik, melibatkan, dan mempertahankan audiens.",
-              },
-              {
-                title: "Seni Komunikasi Efektif",
-                number: "620/10/FTH/2024",
-                image: "/13.png",
-                description:
-                  "Mempelajari teknik komunikasi interpersonal yang efektif, baik verbal maupun non-verbal, dalam konteks profesional.",
-              },
-              {
-                title: "Business Model Development",
-                number: "614/2/FTH/2024",
-                image: "/14.png",
-                description:
-                  "Sertifikat ini membuktikan kemampuan merancang dan mengembangkan model bisnis inovatif yang berkelanjutan.",
-              },
-              {
-                title: "Analytics and Data-Driven Marketing",
-                number: "613/3/FTH/2024",
-                image: "/15.png",
-                description:
-                  "Menunjukkan kompetensi dalam menganalisis data pemasaran untuk mengambil keputusan strategis berbasis insight.",
-              },
-              {
-                title: "Product Marketing",
-                number: "612/15/FTH/2024",
-                image: "/16.png",
-                description:
-                  "Fokus pada strategi peluncuran produk, positioning, dan komunikasi nilai produk untuk pasar sasaran.",
-              },
-              {
-                title: "Introduction to Digital Marketing",
-                number: "611/12/FTH/2024",
-                image: "/4.png",
-                description:
-                  "Sebagai pengantar dunia pemasaran digital, sertifikat ini mencakup overview kanal digital, strategi dasar, dan tren industri.",
-              },
-            ].map((cert, index) => (
+            {CERTIFICATES.map((cert, index) => (
               <div
                 key={index}
-                className={`rounded-2xl border transition-all duration-300 hover:shadow-xl hover:scale-[1.02] ${cardBg} ${borderColor} backdrop-blur-sm overflow-hidden`}
+                className={`perf-card rounded-2xl border transition-shadow duration-200 hover:shadow-lg ${cardBg} ${borderColor} overflow-hidden`}
               >
-                <div className="md:flex">
-                  <div className="md:w-1/3">
+                <div className="md:flex items-stretch">
+                  <div
+                    onClick={() => setSelectedCert(cert)}
+                    className={`md:w-2/5 ${cardBg} flex items-center justify-center p-3 border-b md:border-b-0 md:border-r ${borderColor} overflow-hidden group cursor-pointer relative`}
+                    title="Klik untuk memperbesar sertifikat"
+                  >
                     <img
                       src={cert.image}
                       alt={cert.title}
-                      className="w-full h-48 md:h-full object-cover"
+                      loading={index < 2 ? "eager" : "lazy"}
+                      decoding="async"
+                      className="max-h-56 md:max-h-64 w-auto max-w-full object-contain rounded-lg transition-transform duration-300 group-hover:scale-105 shadow-sm"
                     />
+                    <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                      <span className="px-3.5 py-1.5 rounded-full bg-black/75 backdrop-blur-sm text-white text-xs font-medium flex items-center gap-1.5 shadow-lg">
+                        <ZoomIn size={14} />
+                        <span>Lihat Sertifikat</span>
+                      </span>
+                    </div>
                   </div>
-                  <div className="md:w-2/3 p-6 flex flex-col justify-between">
+                  <div className="md:w-3/5 p-6 flex flex-col justify-between min-h-0">
                     <div>
+                      {cert.badge && (
+                        <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300 border border-emerald-300/60 dark:border-emerald-700/60 mb-2">
+                          {cert.badge}
+                        </span>
+                      )}
                       <h3 className={`text-xl font-semibold mb-1 ${textColor}`}>
                         {cert.title}
                       </h3>
-                      <p className={`${secondaryTextColor} text-sm`}>
+                      <p className={`${secondaryTextColor} text-sm mb-2`}>
                         No. Sertifikat:{" "}
                         <span className="font-mono">{cert.number}</span>
                       </p>
-                      <p className={`${secondaryTextColor} text-sm mt-2`}>
-                        {cert.description}
-                      </p>
+                      <div className="overflow-y-auto max-h-32 pr-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+                        <p className={`${secondaryTextColor} text-sm leading-relaxed`}>
+                          {cert.description}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -720,10 +1191,63 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
             ))}
           </div>
 
+          {/* Lightbox Modal Preview Sertifikat Penuh */}
+          {selectedCert && (
+            <div
+              className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+              onClick={() => setSelectedCert(null)}
+            >
+              <div
+                className={`relative max-w-3xl w-full rounded-2xl overflow-hidden shadow-2xl border ${borderColor} ${cardBg} p-4 sm:p-6`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Header Modal */}
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    {selectedCert.badge && (
+                      <span className="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300">
+                        {selectedCert.badge}
+                      </span>
+                    )}
+                    <h4 className={`text-lg sm:text-xl font-semibold ${textColor} mt-1`}>
+                      {selectedCert.title}
+                    </h4>
+                  </div>
+                  <button
+                    onClick={() => setSelectedCert(null)}
+                    className={`p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors ${textColor}`}
+                    title="Tutup"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+
+                {/* Foto Penuh Sertifikat */}
+                <div className="relative rounded-xl overflow-hidden bg-black/20 flex items-center justify-center max-h-[65vh]">
+                  <img
+                    src={selectedCert.image}
+                    alt={selectedCert.title}
+                    className="max-h-[65vh] w-auto max-w-full object-contain rounded-lg shadow-inner"
+                  />
+                </div>
+
+                {/* Keterangan */}
+                <div className="mt-4 pt-3 border-t border-gray-200/40 dark:border-gray-700/40">
+                  <p className={`${secondaryTextColor} text-sm leading-relaxed text-justify mb-2`}>
+                    {selectedCert.description}
+                  </p>
+                  <p className={`${secondaryTextColor} text-xs font-mono`}>
+                    Nomor Registrasi / Seri: {selectedCert.number}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="mt-12 text-center">
             <p className={`${secondaryTextColor} mb-6 text-lg`}>
-              This page shows the official certificates I've earned through
-              online courses and digital training sessions.
+              Halaman ini menampilkan sertifikat resmi yang telah saya peroleh
+              melalui berbagai kursus dan pelatihan digital.
             </p>
           </div>
         </div>
@@ -732,252 +1256,140 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
     case "projects":
       return (
         <div
-          className="p-8"
+          className="p-5 md:p-7"
           style={{
             fontFamily:
               '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
           }}
         >
-          <h1 className={`text-4xl font-light mb-8 ${textColor}`}>
-            Featured Projects
-          </h1>
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-7">
+            <div>
+              <h1 className={`text-3xl md:text-4xl font-light ${textColor}`}>
+                Proyek Unggulan
+              </h1>
+              <p className={`mt-2 ${secondaryTextColor}`}>
+                Kumpulan proyek aplikasi web kustom, e-commerce, dan produk
+                boilerplate dari{" "}
+                <a
+                  href="https://juangdev.my.id"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${accentColor} font-medium hover:underline`}
+                >
+                  JuangDev
+                </a>{" "}
+                beserta proyek klien yang telah dipublikasikan.
+              </p>
+            </div>
+          </div>
 
-          <div className="grid gap-8">
-            {[
-              {
-                title: "Website E-Commerce ",
-                image: "/webpatah.png",
-                description:
-                  "Sistem ini mengelola order secara otomatis dengan penugasan kurir terdekat berbasis jarak (Haversine), pelacakan real-time, payment gateway, dan estimasi waktu tiba. Dilengkapi analisis stok dan rekomendasi produk, proses terjadwal untuk pembatalan order, notifikasi, serta alur pembatalan dengan pemulihan stok dan pelacakan refund. Dibangun menggunakan Laravel 11, MySQL, Bootstrap 5, Leaflet.js, dan Queue Jobs.",
-
-                tech: ["Laravel", "Blade", "MySql"],
-                stars: 96,
-                link: "https://lnkd.in/gdTvt53K",
-              },
-              {
-                title: "Design E-Commerce ",
-                image: "/patah.png",
-                description:
-                  "A collection of digital marketing visuals and made using Canva",
-
-                tech: ["Canva"],
-                stars: 96,
-                link: "https://www.canva.com/design/DAHAdMYrJuM/gEa6fwHOxkOlhiPDZoSZSA/edit?utm_content=DAHAdMYrJuM&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton",
-              },
-              {
-                title: "Tartil Land",
-                image: "/tartil.png",
-                description:
-                  "A landing page for a fictional food & beverage business, showcasing menus, services, and promotional offers. Built with a clean and responsive design to enhance user engagement and brand visibility.",
-
-                tech: ["React", "JavaScript"],
-                stars: 96,
-                link: "https://tartil-land.vercel.app/",
-              },
-              {
-                title: "Bisnis F&B",
-                image: "/fnb.png",
-                description:
-                  "A landing page for a fictional food & beverage business, showcasing menus, services, and promotional offers. Built with a clean and responsive design to enhance user engagement and brand visibility.",
-
-                tech: ["Html", "CSS", "JavaScript"],
-                stars: 96,
-                link: "https://technopreneurship-roan.vercel.app/",
-              },
-              {
-                title: "Profile Desa",
-                image: "/desa.png",
-                description:
-                  "An uvillage profile website designed to display demographic data, local governance information, and geographic features. Built using PHP Blade with a clean Bootstrap layout and MySQL integration.",
-
-                tech: ["Blade", "Php", "MySQL", "Bootstrap"],
-                stars: 96,
-                link: "https://wonokarang.projekfilkom.com/",
-              },
-              {
-                title: "Unofficial Byon Combat",
-                image: "/byon.png",
-                description:
-                  "A fan-made promotional site for Byon Combat, featuring a sleek interface, interactive product showcase, and mobile-friendly design. Developed with React and Tailwind CSS to ensure fast load times and responsiveness.",
-
-                tech: ["React", "Tailwind CSS", "JavaScript"],
-                stars: 96,
-                link: "https://byon-combat.vercel.app/",
-              },
-              {
-                title: "Unofficial Organisasi",
-                image: "/organisasi.png",
-                description:
-                  "An unofficial website for a student organization, highlighting its vision, events, structure, and news. Designed to foster community engagement with a modern and responsive user interface.",
-
-                tech: ["React", "Tailwind CSS", "JavaScript"],
-                stars: 96,
-                link: "https://organisasi-gilt.vercel.app/",
-              },
-              {
-                title: "Hiking Information Website",
-                image: "/website-pendakian.png",
-                description:
-                  "A web-based platform that provides hiking route information, weather updates, and gear recommendations with a responsive design.",
-                tech: ["React", "Tailwind CSS", "JavaScript"],
-                stars: 96,
-                link: "https://youth-wear-modern-fashion-for-young.vercel.app/",
-              },
-              {
-                title: "Online Shop – Mie Ayam",
-                image: "/onloineshop-mieayam.png",
-                description:
-                  "A responsive food e-commerce site tailored for local culinary business, offering menu listings, cart management, and smooth checkout flow.",
-                tech: ["React", "Tailwind CSS", "JavaScript"],
-                stars: 88,
-                link: "https://faulnam.github.io/WEN-JUALAN/",
-              },
-              {
-                title: "Modern E-Commerce Platform",
-                image: "/Web onlin.png",
-                description:
-                  "A full-stack online store built with React and Node.js, featuring product management and secure checkout.",
-                tech: ["React", "Node.js", "MongoDB", "Tailwind CSS"],
-                stars: 120,
-                link: "https://github.com/faulnam/Aplikasi-Web-Baju",
-              },
-              {
-                title: "Employee Attendance System",
-                image: "/SI.png",
-                description:
-                  "A web-based attendance system to manage employee presence and generate daily reports efficiently.",
-                tech: ["HTML", "CSS", "PHP", "MySQL"],
-                stars: 85,
-                link: "https://github.com/faulnam/APK-WEB-ABSENSI",
-              },
-              {
-                title: "Online Store Prototype",
-                image: "/web.png",
-                description:
-                  "A responsive web prototype for online retail with a shopping cart and product display.",
-                tech: ["Figma", "HTML", "CSS", "JavaScript"],
-                stars: 95,
-                link: "https://github.com/faulnam/APK-WEB-ATK",
-              },
-              {
-                title: "Personal Portfolio Website",
-                image: "/webpersonal.png",
-                description:
-                  "An interactive portfolio site to showcase my profile, skills, and recent projects.",
-                tech: ["Next.js", "Tailwind CSS", "TypeScript"],
-                stars: 200,
-                link: "https://faulnam.github.io/WEB-PERSONAL/",
-              },
-              {
-                title: "Dynamic Blog Platform",
-                image: "/Blog.png",
-                description:
-                  "A CMS-based blog with user authentication, commenting, and rich text editing.",
-                tech: ["React", "Firebase", "QuillJS"],
-                stars: 110,
-                link: "https://faulnam.github.io/WEB-KELAS/",
-              },
-              {
-                title: "Creative Canva Designs",
-                image: "/design.png",
-                description:
-                  "A collection of digital marketing visuals and templates made using Canva.",
-                tech: ["Canva", "Brand Design", "Marketing"],
-                stars: 50,
-              },
-              {
-                title: "Educational Game - Hijaiyah",
-                image: "/game.png",
-                description:
-                  "An interactive Arabic game built with Construct 2 to teach children Hijaiyah letters.",
-                tech: ["Construct 2", "Game Design"],
-                stars: 130,
-              },
-              {
-                title: "Social Media Growth Strategy",
-                image: "/sms.png",
-                description:
-                  "Grew a TikTok account to over 1,000 followers in 2 months with content planning and analytics.",
-                tech: ["TikTok", "Analytics", "Content Strategy"],
-                stars: 70,
-                link: "https://www.tiktok.com/faulnam_",
-              },
-              {
-                title: "UI/UX Design Case Study",
-                image: "/uiux.png",
-                description:
-                  "A comprehensive UI/UX case study focusing on user flow and usability for web and mobile.",
-                tech: ["Figma", "UX Research", "Wireframing"],
-                stars: 100,
-              },
-              {
-                title: "Social Blog Website",
-                image: "/web3.png",
-                description:
-                  "A social-themed blog platform for community interaction, complete with tags and filters.",
-                tech: ["Laravel", "MySQL", "Bootstrap"],
-                stars: 90,
-                link: "https://github.com/faulnam/catatansemenit",
-              },
-            ].map((project, index) => (
+          <div className="grid gap-7">
+            {PROJECTS.map((project, index) => (
               <div
-                key={index}
-                className={`rounded-2xl border transition-all duration-300 hover:shadow-xl hover:scale-[1.02] ${cardBg} ${borderColor} backdrop-blur-sm overflow-hidden`}
+                key={project.domain}
+                className={`perf-card rounded-2xl border transition-shadow duration-200 hover:shadow-lg ${cardBg} ${borderColor} overflow-hidden`}
               >
-                <div className="md:flex">
-                  <div className="md:w-1/3">
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-48 md:h-full object-cover"
-                    />
+                <div className="md:flex items-stretch">
+                  {/* Kolom Gambar - Background selaras dengan deskripsi, tanpa perbedaan warna */}
+                  <div className={`w-full md:w-[50%] lg:w-[52%] shrink-0 relative overflow-hidden ${cardBg} flex items-center justify-center border-b md:border-b-0 md:border-r ${borderColor} group`}>
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full block aspect-[16/10] overflow-hidden relative"
+                      title={`Buka ${project.title}`}
+                    >
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        loading={index < 2 ? "eager" : "lazy"}
+                        decoding="async"
+                        className="w-full h-full object-cover object-left-top transition-transform duration-300 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center pointer-events-none">
+                        <span className="px-3.5 py-1.5 rounded-full bg-black/75 backdrop-blur-sm text-white text-xs font-medium flex items-center gap-1.5 shadow-lg">
+                          <ExternalLink size={13} />
+                          <span>Kunjungi Website</span>
+                        </span>
+                      </div>
+                    </a>
                   </div>
-                  <div className="md:w-2/3 p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <h3 className={`text-2xl font-semibold ${textColor}`}>
-                        {project.title}
-                      </h3>
-                      <div className="flex items-center space-x-4">
-                        <div className="flex items-center space-x-1">
-                          <Star size={16} className={accentColor} />
-                          <span className={`text-sm ${secondaryTextColor}`}>
-                            {project.stars}
-                          </span>
+
+                  {/* Kolom Konten */}
+                  <div className="flex-1 p-5 md:p-6 flex flex-col justify-between min-w-0">
+                    <div>
+                      {/* Header Kartu */}
+                      <div className="flex items-start justify-between gap-3 mb-2">
+                        <div>
+                          <h3 className={`text-xl md:text-2xl font-semibold ${textColor} leading-tight`}>
+                            {project.title}
+                          </h3>
+                          <a
+                            href={project.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`text-sm font-medium ${accentColor} hover:underline inline-flex items-center gap-1 mt-1`}
+                          >
+                            <Globe size={14} />
+                            <span>{project.domain}</span>
+                          </a>
                         </div>
                         {project.link && (
                           <a
                             href={project.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`p-2 rounded-lg transition-colors hover:scale-110 duration-200 ${
-                              isDark
-                                ? "hover:bg-gray-700 text-gray-400 hover:text-white"
-                                : "hover:bg-gray-100 text-gray-600 hover:text-gray-900"
-                            }`}
-                            title="View project"
-                            aria-label="View project"
+                            className="px-3.5 py-1.5 rounded-lg text-xs font-medium bg-blue-600 hover:bg-blue-700 text-white inline-flex items-center gap-1.5 shrink-0 transition-colors duration-150 shadow-sm"
+                            title="Kunjungi Website"
                           >
-                            <ExternalLink size={18} />
+                            <span>Kunjungi</span>
+                            <ExternalLink size={14} />
                           </a>
                         )}
                       </div>
+
+                      {/* Area Deskripsi & Fitur yang bisa di-scroll mandiri tiap kartu jika panjang */}
+                      <div className="overflow-y-auto max-h-44 md:max-h-52 my-3 pr-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+                        <p
+                          className={`${secondaryTextColor} leading-relaxed text-sm md:text-base mb-3`}
+                        >
+                          {project.description}
+                        </p>
+
+                        {/* Fitur Unggulan */}
+                        <div>
+                          <h4
+                            className={`text-xs font-semibold uppercase tracking-wider mb-2 ${textColor} opacity-80`}
+                          >
+                            Fitur Unggulan:
+                          </h4>
+                          <ul className="grid sm:grid-cols-2 gap-1.5">
+                            {project.features.map((feat) => (
+                              <li
+                                key={feat}
+                                className={`flex items-start text-xs md:text-sm ${secondaryTextColor}`}
+                              >
+                                <CheckCircle2
+                                  size={15}
+                                  className="mr-1.5 mt-0.5 text-emerald-500 shrink-0"
+                                />
+                                <span>{feat}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
                     </div>
 
-                    <p
-                      className={`${secondaryTextColor} mb-6 leading-relaxed text-lg`}
-                    >
-                      {project.description}
-                    </p>
-
-                    <div className="flex flex-wrap gap-2 mb-6">
+                    {/* Footer Tech Tags */}
+                    <div className="flex flex-wrap gap-1.5 pt-3 border-t border-gray-200/40 dark:border-gray-700/40">
                       {project.tech.map((tech) => (
                         <span
                           key={tech}
-                          className={`px-3 py-1 rounded-full text-sm ${
-                            isDark
-                              ? "bg-gray-700/50 text-gray-300 border border-gray-600/50"
-                              : "bg-gray-100 text-gray-700 border border-gray-200"
-                          }`}
+                          className={`px-3 py-1 rounded-full text-xs font-medium ${isDark
+                            ? "bg-gray-700/70 text-gray-200 border border-gray-600/50"
+                            : "bg-gray-200/70 text-gray-800 border border-gray-300/60"
+                            }`}
                         >
                           {tech}
                         </span>
@@ -991,19 +1403,214 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
 
           <div className="mt-12 text-center">
             <p className={`${secondaryTextColor} mb-6 text-lg`}>
-              Want to see more of my work?
+              Ingin melihat produk boilerplate siap pakai lainnya atau memesan
+              website kustom?
             </p>
-            <a
-              href="https://github.com/faulnam?tab=repositories"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`px-8 py-3 inline-block rounded-lg font-medium transition-all duration-200 hover:scale-105 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg`}
-            >
-              View All Projects on GitHub
-            </a>
+            <div className="flex flex-wrap justify-center gap-4">
+              <a
+                href="https://juangdev.my.id"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-8 py-3 inline-block rounded-lg font-medium transition-transform duration-150 hover:scale-105 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg"
+              >
+                Kunjungi JuangDev (juangdev.my.id)
+              </a>
+              <a
+                href="https://github.com/faulnam?tab=repositories"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`px-8 py-3 inline-block rounded-lg font-medium transition-transform duration-150 hover:scale-105 ${cardBg} border ${borderColor} ${textColor}`}
+              >
+                Lihat Repositori GitHub
+              </a>
+            </div>
           </div>
         </div>
       );
+
+    case "documentation": {
+      const categories = [
+        "Semua",
+        "Kolaborasi Tim",
+        "Meeting & Standup",
+        "Sesi Coding",
+        "Pengembangan Web",
+        "Desain UI/UX",
+      ];
+      const filteredActivities =
+        docFilter === "Semua"
+          ? ACTIVITIES
+          : ACTIVITIES.filter((item) => item.category === docFilter);
+
+      return (
+        <div
+          className="p-5 md:p-7"
+          style={{
+            fontFamily:
+              '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
+          }}
+        >
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+            <div>
+              <h1 className={`text-3xl md:text-4xl font-light ${textColor}`}>
+                Dokumentasi Kegiatan
+              </h1>
+              <p className={`mt-2 ${secondaryTextColor}`}>
+                Koleksi foto dokumentasi kerja sama tim, sesi coding, meeting daring, dan perancangan produk digital.
+              </p>
+            </div>
+          </div>
+
+          {/* Filter Tabs */}
+          <div className="flex flex-wrap gap-2 mb-7">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setDocFilter(cat)}
+                className={`px-3.5 py-1.5 rounded-full text-xs md:text-sm font-medium transition-all duration-150 ${docFilter === cat
+                  ? "bg-blue-600 text-white shadow-sm"
+                  : `${cardBg} ${borderColor} border ${secondaryTextColor} hover:opacity-80`
+                  }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* Grid Dokumentasi */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {filteredActivities.map((act) => (
+              <div
+                key={act.id}
+                className={`perf-card rounded-2xl border transition-all duration-200 hover:shadow-lg ${cardBg} ${borderColor} overflow-hidden flex flex-col`}
+              >
+                {/* Foto Dokumentasi */}
+                <div
+                  onClick={() => setSelectedDoc(act)}
+                  className="relative aspect-[16/10] overflow-hidden bg-gray-900 group cursor-pointer"
+                  title="Klik untuk memperbesar foto"
+                >
+                  <img
+                    src={act.image}
+                    alt={act.title}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                    <span className="px-3.5 py-1.5 rounded-full bg-black/75 backdrop-blur-sm text-white text-xs font-medium flex items-center gap-1.5 shadow-lg">
+                      <ZoomIn size={14} />
+                      <span>Lihat Foto Penuh</span>
+                    </span>
+                  </div>
+                </div>
+
+                {/* Konten Keterangan Foto */}
+                <div className="p-5 flex-1 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <span
+                        className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${isDark
+                          ? "bg-blue-900/50 text-blue-300 border border-blue-800/50"
+                          : "bg-blue-100 text-blue-800 border border-blue-200"
+                          }`}
+                      >
+                        {act.organization} • {act.category}
+                      </span>
+                      <span className={`text-xs font-mono ${secondaryTextColor}`}>
+                        {act.date}
+                      </span>
+                    </div>
+
+                    <h3 className={`text-lg font-semibold ${textColor} mb-2 leading-snug`}>
+                      {act.title}
+                    </h3>
+
+                    <p className={`${secondaryTextColor} text-sm leading-relaxed text-justify mb-3`}>
+                      {act.description}
+                    </p>
+                  </div>
+
+                  {/* Highlight Tags */}
+                  <div className="flex flex-wrap gap-1.5 pt-3 border-t border-gray-200/40 dark:border-gray-700/40">
+                    {act.highlights.map((tag) => (
+                      <span
+                        key={tag}
+                        className={`px-2.5 py-0.5 rounded-md text-[11px] font-medium ${isDark
+                          ? "bg-gray-700/60 text-gray-300 border border-gray-600/40"
+                          : "bg-gray-200/70 text-gray-700 border border-gray-300/60"
+                          }`}
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Lightbox Modal Preview Foto Penuh */}
+          {selectedDoc && (
+            <div
+              className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+              onClick={() => setSelectedDoc(null)}
+            >
+              <div
+                className={`relative max-w-4xl w-full rounded-2xl overflow-hidden shadow-2xl border ${borderColor} ${cardBg} p-4 sm:p-6`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Header Modal */}
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <span
+                      className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${isDark
+                        ? "bg-blue-900/50 text-blue-300"
+                        : "bg-blue-100 text-blue-800"
+                        }`}
+                    >
+                      {selectedDoc.organization} • {selectedDoc.category}
+                    </span>
+                    <h4 className={`text-lg sm:text-xl font-semibold ${textColor} mt-1`}>
+                      {selectedDoc.title}
+                    </h4>
+                  </div>
+                  <button
+                    onClick={() => setSelectedDoc(null)}
+                    className={`p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors ${textColor}`}
+                    title="Tutup"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+
+                {/* Foto Penuh */}
+                <div className="relative rounded-xl overflow-hidden bg-black/20 flex items-center justify-center max-h-[60vh]">
+                  <img
+                    src={selectedDoc.image}
+                    alt={selectedDoc.title}
+                    className="max-h-[60vh] w-auto max-w-full object-contain rounded-lg shadow-inner"
+                  />
+                </div>
+
+                {/* Keterangan */}
+                <div className="mt-4 pt-3 border-t border-gray-200/40 dark:border-gray-700/40 flex items-start justify-between gap-4">
+                  <p className={`${secondaryTextColor} text-sm leading-relaxed text-justify`}>
+                    {selectedDoc.description}
+                  </p>
+                  <span
+                    className={`text-xs font-mono shrink-0 px-2.5 py-1 rounded-md ${isDark ? "bg-gray-800 text-gray-400" : "bg-gray-100 text-gray-600"
+                      }`}
+                  >
+                    {selectedDoc.date}
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
 
     case "contact":
       return (
@@ -1015,96 +1622,129 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
           }}
         >
           <h1 className={`text-4xl font-light mb-8 ${textColor}`}>
-            Get In Touch
+            Hubungi Saya
           </h1>
 
           <div className="grid md:grid-cols-2 gap-12">
             <div>
               <h2 className={`text-2xl font-semibold mb-8 ${textColor}`}>
-                Contact Information
+                Informasi Kontak
               </h2>
 
-              <div className="space-y-6">
-                <div
-                  className={`flex items-center p-4 rounded-xl ${cardBg} border ${borderColor} backdrop-blur-sm hover:shadow-lg transition-all duration-300`}
+              <div className="space-y-4">
+                <a
+                  href="mailto:syifakul.anm@gmail.com"
+                  className={`flex items-center p-4 rounded-xl ${cardBg} border ${borderColor} hover:shadow-md transition-shadow duration-200`}
                 >
-                  <div
-                    className={`p-3 rounded-lg mr-4 bg-gradient-to-br from-red-500 to-pink-600`}
-                  >
+                  <div className="p-3 rounded-lg mr-4 bg-gradient-to-br from-red-500 to-pink-600">
                     <Mail className="text-white" size={20} />
                   </div>
                   <div>
                     <p className={`font-semibold ${textColor}`}>Email</p>
-                    <p
-                      className={`${accentColor} hover:underline cursor-pointer`}
-                    >
+                    <p className={`${accentColor} hover:underline`}>
                       syifakul.anm@gmail.com
                     </p>
                   </div>
-                </div>
+                </a>
 
-                <div
-                  className={`flex items-center p-4 rounded-xl ${cardBg} border ${borderColor} backdrop-blur-sm hover:shadow-lg transition-all duration-300`}
+                <a
+                  href="https://wa.me/62859171681988"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`flex items-center p-4 rounded-xl ${cardBg} border ${borderColor} hover:shadow-md transition-shadow duration-200`}
                 >
-                  <div
-                    className={`p-3 rounded-lg mr-4 bg-gradient-to-br from-blue-500 to-blue-600`}
-                  >
+                  <div className="p-3 rounded-lg mr-4 bg-gradient-to-br from-emerald-500 to-green-600">
+                    <Phone className="text-white" size={20} />
+                  </div>
+                  <div>
+                    <p className={`font-semibold ${textColor}`}>
+                      Telepon / WhatsApp
+                    </p>
+                    <p className={`${accentColor} hover:underline`}>
+                      +62 859-1716-81988
+                    </p>
+                  </div>
+                </a>
+
+                <a
+                  href="https://juangdev.my.id"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`flex items-center p-4 rounded-xl ${cardBg} border ${borderColor} hover:shadow-md transition-shadow duration-200`}
+                >
+                  <div className="p-3 rounded-lg mr-4 bg-gradient-to-br from-indigo-500 to-purple-600">
+                    <Globe className="text-white" size={20} />
+                  </div>
+                  <div>
+                    <p className={`font-semibold ${textColor}`}>
+                      Studio &amp; Boilerplate Website
+                    </p>
+                    <p className={`${accentColor} hover:underline`}>
+                      juangdev.my.id
+                    </p>
+                  </div>
+                </a>
+
+                <a
+                  href="https://linkedin.com/in/faulnam"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`flex items-center p-4 rounded-xl ${cardBg} border ${borderColor} hover:shadow-md transition-shadow duration-200`}
+                >
+                  <div className="p-3 rounded-lg mr-4 bg-gradient-to-br from-blue-500 to-blue-600">
                     <Linkedin className="text-white" size={20} />
                   </div>
                   <div>
                     <p className={`font-semibold ${textColor}`}>LinkedIn</p>
-                    <p
-                      className={`${accentColor} hover:underline cursor-pointer`}
-                    >
+                    <p className={`${accentColor} hover:underline`}>
                       linkedin.com/in/faulnam
                     </p>
                   </div>
-                </div>
+                </a>
 
-                <div
-                  className={`flex items-center p-4 rounded-xl ${cardBg} border ${borderColor} backdrop-blur-sm hover:shadow-lg transition-all duration-300`}
+                <a
+                  href="https://github.com/faulnam"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`flex items-center p-4 rounded-xl ${cardBg} border ${borderColor} hover:shadow-md transition-shadow duration-200`}
                 >
-                  <div
-                    className={`p-3 rounded-lg mr-4 bg-gradient-to-br from-gray-700 to-gray-900`}
-                  >
+                  <div className="p-3 rounded-lg mr-4 bg-gradient-to-br from-gray-700 to-gray-900">
                     <Github className="text-white" size={20} />
                   </div>
                   <div>
                     <p className={`font-semibold ${textColor}`}>GitHub</p>
-                    <p
-                      className={`${accentColor} hover:underline cursor-pointer`}
-                    >
+                    <p className={`${accentColor} hover:underline`}>
                       github.com/faulnam
                     </p>
                   </div>
-                </div>
+                </a>
               </div>
 
               <div
-                className={`mt-12 p-6 rounded-2xl ${cardBg} border ${borderColor} backdrop-blur-sm`}
+                className={`mt-8 p-6 rounded-2xl ${cardBg} border ${borderColor}`}
               >
-                <h3 className={`text-xl font-semibold mb-4 ${textColor}`}>
-                  Let's Work Together
+                <h3 className={`text-xl font-semibold mb-3 ${textColor}`}>
+                  Mari Bekerja Sama!
                 </h3>
                 <p
-                  className={`text-justify ${secondaryTextColor} leading-relaxed text-lg`}
+                  className={`text-justify ${secondaryTextColor} leading-relaxed text-base`}
                 >
-                  I'm always interested in hearing about new opportunities and
-                  exciting projects. Whether you have a question, want to
-                  discuss a project, or just want to say hi, I'd love to hear
-                  from you!
+                  Saya selalu terbuka untuk peluang kerja, kolaborasi proyek
+                  pengembangan aplikasi web, maupun pemesanan produk boilerplate
+                  website siap pakai melalui <strong>JuangDev</strong>. Jangan
+                  ragu untuk menghubungi saya!
                 </p>
               </div>
             </div>
 
             <div>
               <h2 className={`text-2xl font-semibold mb-8 ${textColor}`}>
-                Send a Message
+                Kirim Pesan
               </h2>
 
               <form
                 className="space-y-6"
-                action="https://formspree.io/f/mwpkbgvz" // ← GANTI dengan Formspree endpoint kamu
+                action="https://formspree.io/f/mwpkbgvz"
                 method="POST"
               >
                 <div>
@@ -1112,19 +1752,18 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
                     className={`block text-sm font-semibold mb-3 ${textColor}`}
                     htmlFor="name"
                   >
-                    Name
+                    Nama Lengkap
                   </label>
                   <input
                     type="text"
                     name="name"
                     id="name"
                     required
-                    className={`w-full px-4 py-3 rounded-xl border transition-all duration-200 focus:scale-[1.02] ${
-                      isDark
-                        ? "bg-gray-800/50 border-gray-700/50 text-white focus:border-blue-500 backdrop-blur-sm"
-                        : "bg-white/50 border-gray-300/50 text-gray-900 focus:border-blue-500 backdrop-blur-sm"
-                    } focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
-                    placeholder="Your name"
+                    className={`w-full px-4 py-3 rounded-xl border transition-colors duration-150 ${isDark
+                      ? "bg-gray-800/70 border-gray-700 text-white focus:border-blue-500"
+                      : "bg-gray-50 border-gray-300 text-gray-900 focus:border-blue-500"
+                      } focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
+                    placeholder="Masukkan nama Anda"
                   />
                 </div>
 
@@ -1133,19 +1772,18 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
                     className={`block text-sm font-semibold mb-3 ${textColor}`}
                     htmlFor="email"
                   >
-                    Email
+                    Alamat Email
                   </label>
                   <input
                     type="email"
                     name="email"
                     id="email"
                     required
-                    className={`w-full px-4 py-3 rounded-xl border transition-all duration-200 focus:scale-[1.02] ${
-                      isDark
-                        ? "bg-gray-800/50 border-gray-700/50 text-white focus:border-blue-500 backdrop-blur-sm"
-                        : "bg-white/50 border-gray-300/50 text-gray-900 focus:border-blue-500 backdrop-blur-sm"
-                    } focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
-                    placeholder="your.email@example.com"
+                    className={`w-full px-4 py-3 rounded-xl border transition-colors duration-150 ${isDark
+                      ? "bg-gray-800/70 border-gray-700 text-white focus:border-blue-500"
+                      : "bg-gray-50 border-gray-300 text-gray-900 focus:border-blue-500"
+                      } focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
+                    placeholder="nama@email.com"
                   />
                 </div>
 
@@ -1154,27 +1792,26 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
                     className={`block text-sm font-semibold mb-3 ${textColor}`}
                     htmlFor="message"
                   >
-                    Message
+                    Pesan
                   </label>
                   <textarea
                     name="message"
                     id="message"
                     rows={6}
                     required
-                    className={`w-full px-4 py-3 rounded-xl border transition-all duration-200 focus:scale-[1.02] resize-none ${
-                      isDark
-                        ? "bg-gray-800/50 border-gray-700/50 text-white focus:border-blue-500 backdrop-blur-sm"
-                        : "bg-white/50 border-gray-300/50 text-gray-900 focus:border-blue-500 backdrop-blur-sm"
-                    } focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
-                    placeholder="Tell me about your project or just say hello!"
+                    className={`w-full px-4 py-3 rounded-xl border transition-colors duration-150 resize-none ${isDark
+                      ? "bg-gray-800/70 border-gray-700 text-white focus:border-blue-500"
+                      : "bg-gray-50 border-gray-300 text-gray-900 focus:border-blue-500"
+                      } focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
+                    placeholder="Ceritakan kebutuhan proyek atau pesan Anda..."
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 hover:scale-105 shadow-lg"
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-transform duration-150 hover:scale-[1.02] shadow-lg"
                 >
-                  Send Message
+                  Kirim Pesan Sekarang
                 </button>
               </form>
             </div>
@@ -1183,8 +1820,8 @@ const WindowContent: React.FC<WindowContentProps> = ({ app, isDark }) => {
       );
 
     default:
-      return <div className="p-8">Content not found</div>;
+      return <div className="p-8">Konten tidak ditemukan</div>;
   }
-};
+});
 
 export default WindowContent;

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 
 interface WindowProps {
   id: string;
@@ -6,102 +6,136 @@ interface WindowProps {
   children: React.ReactNode;
   isDark: boolean;
   onClose: () => void;
+  onFocus?: () => void;
   zIndex?: number;
 }
 
-const Window: React.FC<WindowProps> = ({ 
-  id, 
+const Window: React.FC<WindowProps> = React.memo(({ 
+  id,
   title, 
   children, 
   isDark, 
   onClose,
+  onFocus,
   zIndex = 30 
 }) => {
   const [isMinimized, setIsMinimized] = useState(false);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [isMaximized, setIsMaximized] = useState(false);
   const windowRef = useRef<HTMLDivElement>(null);
+  const offsetRef = useRef({ x: 0, y: 0 });
+  const dragStartRef = useRef({ x: 0, y: 0 });
+  const isDraggingRef = useRef(false);
+  const rafRef = useRef<number | null>(null);
 
-  useEffect(() => {
-    // Center window on mount
+  const isWide = id === 'projects' || id === 'documentation';
+  const sizeClass = isMaximized 
+    ? 'w-[98vw] max-w-7xl h-[88vh]' 
+    : isWide 
+      ? 'w-[92vw] max-w-5xl max-h-[85vh]' 
+      : 'w-[90vw] max-w-4xl max-h-[85vh]';
+
+  const applyTransform = useCallback((x: number, y: number) => {
     if (windowRef.current) {
-      const rect = windowRef.current.getBoundingClientRect();
-      setPosition({
-        x: (window.innerWidth - rect.width) / 2,
-        y: (window.innerHeight - rect.height) / 2
-      });
+      windowRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
     }
   }, []);
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
-    setDragStart({
-      x: e.clientX - position.x,
-      y: e.clientY - position.y
-    });
-  };
-
-  const handleMouseMove = (e: MouseEvent) => {
-    if (isDragging) {
-      setPosition({
-        x: e.clientX - dragStart.x,
-        y: e.clientY - dragStart.y
-      });
-    }
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
+    if (isMaximized) return;
+    if ((e.target as HTMLElement).closest('button')) return;
+    onFocus?.();
+    isDraggingRef.current = true;
+    dragStartRef.current = {
+      x: e.clientX - offsetRef.current.x,
+      y: e.clientY - offsetRef.current.y
+    };
+    document.body.style.userSelect = 'none';
   };
 
   useEffect(() => {
-    if (isDragging) {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-      return () => {
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseup', handleMouseUp);
-      };
-    }
-  }, [isDragging, dragStart]);
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDraggingRef.current) return;
+      const nextX = e.clientX - dragStartRef.current.x;
+      const nextY = e.clientY - dragStartRef.current.y;
+      offsetRef.current = { x: nextX, y: nextY };
+
+      if (rafRef.current === null) {
+        rafRef.current = requestAnimationFrame(() => {
+          applyTransform(offsetRef.current.x, offsetRef.current.y);
+          rafRef.current = null;
+        });
+      }
+    };
+
+    const handleMouseUp = () => {
+      if (isDraggingRef.current) {
+        isDraggingRef.current = false;
+        document.body.style.userSelect = '';
+        if (rafRef.current !== null) {
+          cancelAnimationFrame(rafRef.current);
+          rafRef.current = null;
+        }
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('mouseup', handleMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, [applyTransform]);
 
   if (isMinimized) {
     return null;
   }
 
+  const toggleMaximize = () => {
+    setIsMaximized((prev) => {
+      const next = !prev;
+      if (next) {
+        applyTransform(0, 0);
+      } else {
+        applyTransform(offsetRef.current.x, offsetRef.current.y);
+      }
+      return next;
+    });
+  };
+
   return (
     <div 
-      className="fixed pointer-events-none"
+      className="fixed inset-0 flex items-center justify-center p-4 pt-10 pb-24 pointer-events-none"
       style={{ zIndex }}
+      onMouseDown={() => onFocus?.()}
     >
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black/20 backdrop-blur-sm pointer-events-auto"
+        className="fixed inset-0 bg-black/25 pointer-events-auto"
         onClick={onClose}
       />
       
       {/* Window */}
       <div 
         ref={windowRef}
-        className={`relative w-full max-w-4xl max-h-[85vh] rounded-xl shadow-2xl overflow-hidden pointer-events-auto transition-all duration-300 ${
+        className={`relative ${sizeClass} rounded-xl shadow-2xl overflow-hidden pointer-events-auto animate-window-open ${
           isDark 
-            ? 'bg-gray-900/95 border border-gray-700/50' 
-            : 'bg-white/95 border border-gray-200/50'
+            ? 'bg-gray-900 border border-gray-700/70' 
+            : 'bg-white border border-gray-200/80'
         }`}
         style={{
-          transform: `translate(${position.x}px, ${position.y}px)`,
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1)'
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+          willChange: 'transform',
         }}
       >
         {/* Title Bar */}
         <div 
-          className={`flex items-center justify-between px-5 py-4 border-b cursor-move select-none ${
+          className={`flex items-center justify-between px-5 py-3.5 border-b cursor-move select-none ${
             isDark 
-              ? 'border-gray-700/50 bg-gray-800/50' 
-              : 'border-gray-200/50 bg-gray-50/50'
+              ? 'border-gray-700/70 bg-gray-800' 
+              : 'border-gray-200/80 bg-gray-50'
           }`}
           onMouseDown={handleMouseDown}
           style={{
@@ -112,14 +146,19 @@ const Window: React.FC<WindowProps> = ({
           <div className="flex items-center space-x-2">
             <button
               onClick={onClose}
-              className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-600 transition-colors shadow-sm hover:shadow-md transform hover:scale-110 duration-150"
+              className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-600 transition-transform duration-150 hover:scale-110"
+              title="Close"
+              aria-label="Close window"
             />
             <button
               onClick={() => setIsMinimized(true)}
-              className="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-600 transition-colors shadow-sm hover:shadow-md transform hover:scale-110 duration-150"
+              className="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-600 transition-transform duration-150 hover:scale-110"
+              title="Minimize"
+              aria-label="Minimize window"
             />
             <button 
-              className="w-3 h-3 rounded-full bg-green-500 hover:bg-green-600 transition-colors shadow-sm hover:shadow-md transform hover:scale-110 duration-150"
+              onClick={toggleMaximize}
+              className="w-3 h-3 rounded-full bg-green-500 hover:bg-green-600 transition-transform duration-150 hover:scale-110"
               title="Maximize"
               aria-label="Maximize window"
             >
@@ -137,12 +176,14 @@ const Window: React.FC<WindowProps> = ({
         </div>
 
         {/* Content */}
-        <div className="overflow-y-auto max-h-[calc(85vh-70px)] scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+        <div className={`overflow-y-auto window-scroll ${
+          isMaximized ? 'h-[calc(85vh-53px)]' : 'max-h-[calc(82vh-53px)]'
+        } scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent`}>
           {children}
         </div>
       </div>
     </div>
   );
-};
+});
 
 export default Window;
