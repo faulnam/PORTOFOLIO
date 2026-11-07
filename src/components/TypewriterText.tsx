@@ -51,7 +51,7 @@ const TypewriterText: React.FC<TypewriterTextProps> = React.memo(({
 
   return (
     <p
-      className={`text-xl md:text-2xl font-light ${
+      className={`text-base sm:text-xl md:text-2xl font-light ${
         isDark ? "text-gray-200" : "text-white"
       } ${className}`}
       style={{

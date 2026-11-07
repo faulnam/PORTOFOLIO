@@ -5,26 +5,35 @@ import Window from './components/Window';
 import WindowContent from './components/WindowContent';
 import TypewriterText from './components/TypewriterText';
 import MirrorModal from './components/MirrorModal';
+import OnboardingArrows from './components/OnboardingArrows';
 
 const WINDOW_TITLES: { [key: string]: string } = {
   home: 'Beranda',
   about: 'Tentang Saya',
   skills: 'Keahlian & Teknologi',
   projects: 'Proyek Saya',
-  contact: 'Hubungi Saya',
+  documentation: 'Dokumentasi Kegiatan',
   certificates: 'Sertifikat & Pelatihan',
+  contact: 'Hubungi Saya',
 };
 
 function App() {
   const [isDark, setIsDark] = useState(false);
-  const [openWindows, setOpenWindows] = useState<string[]>([]);
+  const [openWindows, setOpenWindows] = useState<string[]>(['home']);
   const [mirrorOpen, setMirrorOpen] = useState(false);
+  const [showGuide, setShowGuide] = useState(true);
+
+  const dismissGuide = useCallback(() => {
+    setShowGuide(false);
+  }, []);
 
   const toggleTheme = useCallback(() => {
+    setShowGuide(false);
     setIsDark((prev) => !prev);
   }, []);
 
   const openApp = useCallback((app: string) => {
+    setShowGuide(false);
     if (app === 'mirror') {
       setMirrorOpen(true);
     } else {
@@ -39,6 +48,7 @@ function App() {
   }, []);
 
   const closeWindow = useCallback((app: string) => {
+    setShowGuide(false);
     setOpenWindows((prev) => prev.filter((window) => window !== app));
   }, []);
 
@@ -75,11 +85,11 @@ function App() {
 
         {/* Welcome Text */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-          <h1 className="text-6xl md:text-8xl font-light mb-6 text-white" style={{
+          <h1 className="text-4xl sm:text-6xl md:text-8xl font-light mb-4 md:mb-6 text-white" style={{
             fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif',
             textShadow: '0 2px 20px rgba(0,0,0,0.3), 0 1px 4px rgba(0,0,0,0.2)'
           }}>
-            My Portofolio
+            My Portfolio
           </h1>
           <TypewriterText
             text="Feel free to explore the dock below!"
@@ -102,12 +112,20 @@ function App() {
             isDark={isDark}
             onClose={() => closeWindow(app)}
             onFocus={() => focusWindow(app)}
+            onInteract={dismissGuide}
             zIndex={30 + index}
           >
             <WindowContent app={app} isDark={isDark} />
           </Window>
         ))}
       </div>
+
+      {/* Onboarding 4 Animated Guide Arrows */}
+      <OnboardingArrows
+        visible={showGuide && openWindows.length === 1 && openWindows[0] === 'home'}
+        isDark={isDark}
+        onDismiss={dismissGuide}
+      />
 
       {/* Dock */}
       <Dock

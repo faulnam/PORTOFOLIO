@@ -37,7 +37,7 @@ const TopBar: React.FC<TopBarProps> = React.memo(({ isDark }) => {
 
 
   return (
-    <div className={`fixed top-0 left-0 right-0 h-7 flex items-center justify-between px-4 text-sm font-medium z-50 backdrop-blur-md transition-colors duration-200 ${
+    <div className={`fixed top-0 left-0 right-0 h-7 flex items-center justify-between px-3 md:px-4 text-xs md:text-sm font-medium z-50 backdrop-blur-md transition-colors duration-200 ${
       isDark 
         ? 'bg-gray-900/85 text-white border-b border-gray-700/30' 
         : 'bg-white/75 text-black border-b border-white/20'
@@ -45,23 +45,23 @@ const TopBar: React.FC<TopBarProps> = React.memo(({ isDark }) => {
       fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif'
     }}>
       {/* Left side */}
-      <div className="flex items-center space-x-6">
-        <Apple size={16} className={isDark ? 'text-white' : 'text-black'} />
-        <div className="flex items-center space-x-1 text-sm">
+      <div className="flex items-center space-x-2 md:space-x-6 min-w-0">
+        <Apple size={16} className={`shrink-0 ${isDark ? 'text-white' : 'text-black'}`} />
+        <div className="flex items-center space-x-1 text-xs md:text-sm truncate">
           <span className="font-semibold">Welcome</span>
-          <span className="hover:bg-black/10 px-2 py-1 rounded cursor-pointer transition-colors">To</span>
-          <span className="hover:bg-black/10 px-2 py-1 rounded cursor-pointer transition-colors">My</span>
-          <span className="hover:bg-black/10 px-2 py-1 rounded cursor-pointer transition-colors">Personal</span>
-          <span className="hover:bg-black/10 px-2 py-1 rounded cursor-pointer transition-colors">Website</span>
+          <span className="hidden sm:inline hover:bg-black/10 px-2 py-1 rounded cursor-pointer transition-colors">To</span>
+          <span className="hidden sm:inline hover:bg-black/10 px-2 py-1 rounded cursor-pointer transition-colors">My</span>
+          <span className="hidden sm:inline hover:bg-black/10 px-2 py-1 rounded cursor-pointer transition-colors">Personal</span>
+          <span className="hidden sm:inline hover:bg-black/10 px-2 py-1 rounded cursor-pointer transition-colors">Website</span>
         </div>
       </div>
 
       {/* Right side */}
-      <div className="flex items-center space-x-3">
-        <Battery size={16} className="hover:bg-black/10 p-1 rounded cursor-pointer transition-colors" />
-        <Wifi size={16} className="hover:bg-black/10 p-1 rounded cursor-pointer transition-colors" />
-        <Search size={16} className="hover:bg-black/10 p-1 rounded cursor-pointer transition-colors" />
-        <span className="font-mono text-sm ml-2">
+      <div className="flex items-center space-x-2 md:space-x-3 shrink-0">
+        <Battery size={16} className="shrink-0 hover:bg-black/10 md:p-1 rounded cursor-pointer transition-colors" />
+        <Wifi size={16} className="shrink-0 hover:bg-black/10 md:p-1 rounded cursor-pointer transition-colors" />
+        <Search size={16} className="hidden sm:block shrink-0 hover:bg-black/10 md:p-1 rounded cursor-pointer transition-colors" />
+        <span className="font-mono text-[11px] md:text-sm ml-1 md:ml-2 whitespace-nowrap">
           {formatTime(currentTime)}
         </span>
       </div>

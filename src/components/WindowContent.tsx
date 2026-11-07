@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import {
   Github,
   Linkedin,
@@ -256,15 +257,15 @@ const CERTIFICATES = [
 
 const PROJECTS = [
   {
-    title: "JuangDev — Studio Web & Produk Digital Boilerplate",
+    title: "JuangDev — Studio Web & Katalog 20+ Produk Digital",
     domain: "juangdev.my.id",
     image: "/projek/juangdev.my.id.png",
     description:
-      "Platform usaha freelance mandiri saya di bidang studio pengembangan web dan penjualan produk digital. Di dalamnya tersedia 10+ produk digital berupa template boilerplate website siap pakai dalam berbagai kategori (Landing Page, Company Profile, E-Commerce, POS Kasir, hingga Sistem Informasi) untuk membantu UMKM, startup, dan pelaku bisnis memiliki website profesional secara cepat dan efisien.",
+      "Platform studio pengembangan web mandiri yang menghimpun 20+ proyek aplikasi web dan produk digital siap pakai dalam berbagai kategori (SaaS, E-Commerce, POS Kasir, Sistem Informasi, Company Profile, hingga Landing Page). Seluruh katalog karya lengkap dapat dijelajahi langsung melalui website JuangDev.",
     features: [
-      "Platform usaha freelance mandiri studio pengembangan web",
-      "Tersedia 10+ produk digital template boilerplate siap pakai",
-      "Layanan pengembangan aplikasi web kustom & konsultasi proyek",
+      "Etalase utama 20+ proyek web & produk digital siap pakai",
+      "Mencakup sistem SaaS, POS Kasir, E-Commerce, & Sistem Informasi",
+      "Pengembangan end-to-end berbasis Laravel, Tailwind CSS, & MySQL",
       "Integrasi Payment Gateway (Midtrans/Xendit) & notifikasi WhatsApp",
     ],
     tech: ["Laravel", "Blade", "Tailwind CSS", "Alpine.js", "MySQL"],
@@ -485,12 +486,148 @@ const ACTIVITIES = [
       "Dokumentasi perancangan antarmuka e-commerce tas pria & wanita di JuangDev dengan fokus pada tata letak visual minimalis, fotografi produk estetis, dan kenyamanan alur keranjang belanja.",
     highlights: ["E-Commerce Bags", "Minimalist Checkout", "UI/UX Showcase"],
   },
+  {
+    id: "andidev-sprint2",
+    title: "Review Progres & Sprint Planning Sistem Web",
+    organization: "PT Andidev",
+    category: "Kolaborasi Tim",
+    date: "2026",
+    image: "/dokumentasi/pt-andidev2.jpeg",
+    description:
+      "Koordinasi teknis tim developer PT Andidev dalam meninjau progres fitur aplikasi web klien, integrasi API, serta penyusunan timeline sprint release berikutnya.",
+    highlights: ["PT Andidev", "Sprint Planning", "Review Progres Web"],
+  },
+  {
+    id: "nora-strategi",
+    title: "Evaluasi & Diskusi Strategi Platform NoraPadel",
+    organization: "PT Nora Active Indonesia",
+    category: "Kolaborasi Tim",
+    date: "2026",
+    image: "/dokumentasi/pt-nora2.jpeg",
+    description:
+      "Sesi diskusi dan sinkronisasi bersama tim mengenai performa platform e-commerce NoraPadel, feedback pengguna, dan rencana penambahan fitur katalog baru.",
+    highlights: ["Nora Active Indonesia", "Evaluasi E-Commerce", "Diskusi Strategis"],
+  },
+  {
+    id: "nora-modul",
+    title: "Pengembangan Modul & Integrasi Fitur NoraPadel",
+    organization: "PT Nora Active Indonesia",
+    category: "Sesi Coding",
+    date: "2026",
+    image: "/dokumentasi/pt-nora3.jpeg",
+    description:
+      "Sesi implementasi teknis modul transaksi, integrasi payment gateway, dan penyempurnaan alur checkout pada toko online spesialis padel norapadel.com.",
+    highlights: ["Modul Pembayaran", "Laravel & MySQL", "E-Commerce NoraPadel"],
+  },
+  {
+    id: "nora-showcase",
+    title: "Dokumentasi Showcase Produk & Tim Operasional PT Nora",
+    organization: "PT Nora Active Indonesia",
+    category: "Kolaborasi Tim",
+    date: "2026",
+    image: "/dokumentasi/pt-nora4.jpeg",
+    description:
+      "Dokumentasi tim operasional dan display jajaran produk perlengkapan raket padel di PT Nora Active Indonesia untuk kebutuhan promosi dan konten platform.",
+    highlights: ["Showcase Produk", "Operasional Tim", "Ekosistem Padel"],
+  },
+  {
+    id: "weza-debugging",
+    title: "Sesi Coding & Debugging Sistem Internal Perusahaan",
+    organization: "PT Weza Group",
+    category: "Kolaborasi Tim",
+    date: "2025",
+    image: "/dokumentasi/pt-weza2.jpeg",
+    description:
+      "Dokumentasi sesi pengujian kode, query optimization pada MySQL, dan pemecahan kendala (debugging) fitur aplikasi web internal saat magang di PT Weza Group.",
+    highlights: ["PT Weza Group", "Debugging & Query", "Magang Full Stack"],
+  },
+  {
+    id: "bem-seminar",
+    title: "Kepanitiaan Seminar Internasional BEM Fasilkom",
+    organization: "BEM Fakultas Ilmu Komputer",
+    category: "Organisasi & Kampus",
+    date: "2024",
+    image: "/dokumentasi/bem-seminar-internasional.jpeg",
+    description:
+      "Dokumentasi kebersamaan tim panitia BEM Fakultas Ilmu Komputer dalam menyelenggarakan program kerja Seminar Internasional, berfokus pada publikasi media dan peliputan kegiatan.",
+    highlights: ["Seminar Internasional", "BEM Fasilkom", "Publikasi & Dokumentasi"],
+  },
+  {
+    id: "bem-uec",
+    title: "Penyelenggaraan Turnamen Esports (UEC) BEM",
+    organization: "BEM Fakultas Ilmu Komputer",
+    category: "Organisasi & Kampus",
+    date: "2024",
+    image: "/dokumentasi/bem-uec-turnamen.jpeg",
+    description:
+      "Pelaksanaan program kerja turnamen University Esports Championship (UEC) oleh BEM Fakultas Ilmu Komputer, mengelola materi visual, live bracket, dan dokumentasi jalannya kejuaraan.",
+    highlights: ["Turnamen UEC", "Esports Championship", "Media & Desain Grafis"],
+  },
+  {
+    id: "bem-workshop-linkedin",
+    title: "Workshop Edukasi Profil LinkedIn & Personal Branding",
+    organization: "BEM Fakultas Ilmu Komputer",
+    category: "Organisasi & Kampus",
+    date: "2024",
+    image: "/dokumentasi/bem-workshop-linkedin.jpeg",
+    description:
+      "Program kerja workshop BEM Fakultas Ilmu Komputer yang mengedukasi mahasiswa mengenai strategi membangun profil LinkedIn profesional dan perluasan jejaring karir di industri.",
+    highlights: ["Workshop LinkedIn", "Personal Branding", "Divisi Media"],
+  },
+  {
+    id: "bem-lkmmtd-1",
+    title: "Kaderisasi & Kepanitiaan LKMM-TD Mahasiswa",
+    organization: "BEM Fakultas Ilmu Komputer",
+    category: "Organisasi & Kampus",
+    date: "2024",
+    image: "/dokumentasi/bem-lkmmtd.jpeg",
+    description:
+      "Terlibat aktif dalam kepanitiaan Latihan Keterampilan Manajemen Mahasiswa Tingkat Dasar (LKMM-TD) sebagai wadah kaderisasi kepemimpinan dan manajemen organisasi kampus.",
+    highlights: ["LKMM-TD", "Kaderisasi Kepemimpinan", "BEM Fasilkom"],
+  },
+  {
+    id: "bem-lkmmtd-2",
+    title: "Pelatihan Manajemen & Dinamika Forum LKMM-TD",
+    organization: "BEM Fakultas Ilmu Komputer",
+    category: "Organisasi & Kampus",
+    date: "2024",
+    image: "/dokumentasi/bem-lkmmtd2.jpeg",
+    description:
+      "Dokumentasi sesi pemaparan materi manajemen organisasi, simulasi persidangan, dan dinamika pemecahan masalah forum pada rangkaian acara LKMM-TD.",
+    highlights: ["Manajemen Organisasi", "Dinamika Forum", "Pelatihan Mahasiswa"],
+  },
+  {
+    id: "bem-ssc",
+    title: "Kompetisi Siswa SMA/SMK (SSC) Tingkat Daerah",
+    organization: "BEM Fakultas Ilmu Komputer",
+    category: "Organisasi & Kampus",
+    date: "2024",
+    image: "/dokumentasi/bem-ssc-lomba-smasmk.png",
+    description:
+      "Penyelenggaraan event kompetisi pelajar SMA/SMK sederajat (SSC - Sidoarjo Student Competition) yang diinisiasi BEM Fasilkom untuk memacu inovasi dan kreativitas generasi muda.",
+    highlights: ["Kompetisi SSC", "Lomba SMA/SMK", "Inovasi & Kreativitas"],
+  },
 ];
 
 const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark }) => {
   const [selectedDoc, setSelectedDoc] = useState<(typeof ACTIVITIES)[0] | null>(null);
   const [selectedCert, setSelectedCert] = useState<(typeof CERTIFICATES)[0] | null>(null);
   const [docFilter, setDocFilter] = useState("Semua");
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSelectedDoc(null);
+        setSelectedCert(null);
+      }
+    };
+    if (selectedDoc || selectedCert) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedDoc, selectedCert]);
 
   const textColor = isDark ? "text-white" : "text-gray-900";
   const secondaryTextColor = isDark ? "text-gray-300" : "text-gray-600";
@@ -502,14 +639,14 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
     case "home":
       return (
         <div
-          className="p-8"
+          className="p-5 md:p-8"
           style={{
             fontFamily:
               '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
           }}
         >
-          <div className="text-center mb-12">
-            <div className="w-32 h-32 rounded-full mx-auto mb-6 shadow-2xl overflow-hidden">
+          <div className="text-center mb-8 md:mb-12">
+            <div className="w-24 h-24 md:w-32 md:h-32 rounded-full mx-auto mb-4 md:mb-6 shadow-2xl overflow-hidden">
               <img
                 src="/profil.jpeg"
                 alt="Profile"
@@ -517,25 +654,25 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
               />
             </div>
 
-            <h1 className={`text-5xl font-light mb-4 ${textColor}`}>
+            <h1 className={`text-3xl sm:text-4xl md:text-5xl font-light mb-2 md:mb-4 ${textColor}`}>
               M Syifaul Anam
             </h1>
-            <p className={`text-2xl font-light ${secondaryTextColor} mb-8`}>
+            <p className={`text-lg sm:text-xl md:text-2xl font-light ${secondaryTextColor} mb-5 md:mb-8`}>
               Full Stack Developer
             </p>
-            <div className="flex items-center justify-center space-x-8 mb-8">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-0 sm:space-x-8 mb-6 md:mb-8 text-sm md:text-base">
               <div className={`flex items-center ${secondaryTextColor}`}>
-                <MapPin size={18} className="mr-2" />
+                <MapPin size={18} className="mr-2 shrink-0" />
                 Sidoarjo, Jawa Timur
               </div>
               <div className={`flex items-center ${secondaryTextColor}`}>
-                <Calendar size={18} className="mr-2" />
-                Tersedia untuk bekerja
+                <Calendar size={18} className="mr-2 shrink-0" />
+                Siap untuk Magang &amp; Bekerja
               </div>
             </div>
 
             {/* Social Links */}
-            <div className="flex items-center justify-center space-x-4 mb-12">
+            <div className="flex flex-wrap items-center justify-center gap-3 md:gap-0 md:space-x-4 mb-8 md:mb-12">
               <a
                 href="https://github.com/faulnam"
                 target="_blank"
@@ -564,7 +701,7 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
               <a
                 href="/CV_M_Syifaul_Anam.pdf"
                 download="CV_M_Syifaul_Anam.pdf"
-                className="px-4 py-2 rounded-full transition-all duration-200 hover:scale-105 bg-blue-600 hover:bg-blue-700 text-white flex items-center space-x-2"
+                className="px-4 py-2 rounded-full transition-all duration-200 hover:scale-105 bg-blue-600 hover:bg-blue-700 text-white flex items-center space-x-2 text-sm md:text-base"
               >
                 <Download size={16} />
                 <span>Unduh CV</span>
@@ -572,57 +709,57 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className={`p-6 rounded-2xl ${cardBg} border ${borderColor}`}>
-              <h2 className={`text-2xl font-semibold mb-4 ${textColor}`}>
+          <div className="grid md:grid-cols-2 gap-5 md:gap-8">
+            <div className={`p-5 md:p-6 rounded-2xl ${cardBg} border ${borderColor}`}>
+              <h2 className={`text-xl md:text-2xl font-semibold mb-3 md:mb-4 ${textColor}`}>
                 Tentang Saya
               </h2>
               <p
-                className={`text-justify ${secondaryTextColor} leading-relaxed mb-4`}
+                className={`text-left md:text-justify text-sm md:text-base ${secondaryTextColor} leading-relaxed mb-4`}
               >
                 Saya Syifaul Anam, seorang Full Stack Developer berbasis di Sidoarjo dengan fokus pada pengembangan aplikasi web end-to-end menggunakan PHP/Laravel, MySQL, Tailwind CSS, dan JavaScript.
               </p>
               <p
-                className={`text-justify ${secondaryTextColor} leading-relaxed`}
+                className={`text-left md:text-justify text-sm md:text-base ${secondaryTextColor} leading-relaxed`}
               >
                 Berpengalaman bekerja sebagai Full Stack Developer di PT Andidev (Oktober 2026 – Sekarang), PT Nora Active Indonesia, PT Weza Group, serta pendiri studio web JuangDev. Terbiasa menangani integrasi API, payment gateway, arsitektur database, hingga deployment sistem siap pakai.
               </p>
             </div>
 
-            <div className={`p-6 rounded-2xl ${cardBg} border ${borderColor}`}>
-              <h2 className={`text-2xl font-semibold mb-6 ${textColor}`}>
+            <div className={`p-5 md:p-6 rounded-2xl ${cardBg} border ${borderColor}`}>
+              <h2 className={`text-xl md:text-2xl font-semibold mb-4 md:mb-6 ${textColor}`}>
                 Statistik Singkat
               </h2>
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center">
-                  <div className={`text-3xl font-bold ${accentColor} mb-1`}>
-                    10+
+                  <div className={`text-2xl md:text-3xl font-bold ${accentColor} mb-1`}>
+                    20+
                   </div>
-                  <div className={`text-sm ${secondaryTextColor}`}>
-                    Proyek Web
+                  <div className={`text-xs md:text-sm ${secondaryTextColor}`}>
+                    Proyek &amp; Produk Web
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className={`text-3xl font-bold ${accentColor} mb-1`}>
+                  <div className={`text-2xl md:text-3xl font-bold ${accentColor} mb-1`}>
                     Full Stack
                   </div>
-                  <div className={`text-sm ${secondaryTextColor}`}>
+                  <div className={`text-xs md:text-sm ${secondaryTextColor}`}>
                     Laravel &amp; REST API
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className={`text-3xl font-bold ${accentColor} mb-1`}>
+                  <div className={`text-2xl md:text-3xl font-bold ${accentColor} mb-1`}>
                     3+
                   </div>
-                  <div className={`text-sm ${secondaryTextColor}`}>
+                  <div className={`text-xs md:text-sm ${secondaryTextColor}`}>
                     Perusahaan &amp; Studio
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className={`text-3xl font-bold ${accentColor} mb-1`}>
+                  <div className={`text-2xl md:text-3xl font-bold ${accentColor} mb-1`}>
                     S1
                   </div>
-                  <div className={`text-sm ${secondaryTextColor}`}>
+                  <div className={`text-xs md:text-sm ${secondaryTextColor}`}>
                     Informatika
                   </div>
                 </div>
@@ -635,34 +772,34 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
     case "about":
       return (
         <div
-          className="p-8"
+          className="p-5 md:p-8"
           style={{
             fontFamily:
               '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
           }}
         >
-          <h1 className={`text-4xl font-light mb-8 ${textColor}`}>
+          <h1 className={`text-3xl md:text-4xl font-light mb-5 md:mb-8 ${textColor}`}>
             Tentang Saya
           </h1>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-12">
             <div className="md:col-span-2">
-              <h2 className={`text-2xl font-semibold mb-6 ${textColor}`}>
+              <h2 className={`text-xl md:text-2xl font-semibold mb-4 md:mb-6 ${textColor}`}>
                 Perjalanan &amp; Latar Belakang
               </h2>
-              <div className="space-y-5">
+              <div className="space-y-4 md:space-y-5">
                 <p
-                  className={`text-justify ${secondaryTextColor} leading-relaxed text-base md:text-lg`}
+                  className={`text-left md:text-justify ${secondaryTextColor} leading-relaxed text-sm sm:text-base md:text-lg`}
                 >
                   Saya adalah lulusan S1 Informatika dari Universitas Nahdlatul Ulama Sidoarjo (2022 – 2026) dan seorang Full Stack Developer dengan fokus utama pada perancangan dan pembangunan aplikasi web end-to-end menggunakan PHP/Laravel, MySQL, REST API, Tailwind CSS, dan JavaScript.
                 </p>
                 <p
-                  className={`text-justify ${secondaryTextColor} leading-relaxed text-base md:text-lg`}
+                  className={`text-left md:text-justify ${secondaryTextColor} leading-relaxed text-sm sm:text-base md:text-lg`}
                 >
                   Memiliki pengalaman kerja profesional sebagai Full Stack Developer di PT Andidev (Oktober 2026 – Sekarang) dan PT Nora Active Indonesia (norapadel.com), magang di PT Weza Group, serta pendiri studio web JuangDev (juangdev.my.id) yang merancang dan menjual template boilerplate website siap pakai.
                 </p>
                 <p
-                  className={`text-justify ${secondaryTextColor} leading-relaxed text-base md:text-lg`}
+                  className={`text-left md:text-justify ${secondaryTextColor} leading-relaxed text-sm sm:text-base md:text-lg`}
                 >
                   Terbiasa menangani seluruh siklus proyek: dari konsultasi kebutuhan klien, perancangan database, integrasi payment gateway dan WhatsApp, hingga deployment ke server produksi dengan fokus pada performa, keamanan, dan pengalaman pengguna yang optimal.
                 </p>
@@ -734,23 +871,23 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
                 className={`perf-card rounded-2xl border ${borderColor} ${cardBg} shadow-sm overflow-hidden transition-all duration-200 hover:shadow-md`}
               >
                 <div
-                  className={`flex items-center justify-between px-4 py-2.5 border-b ${borderColor} ${isDark ? "bg-gray-800/80" : "bg-gray-100/80"
+                  className={`flex items-center justify-between gap-2 px-3.5 md:px-4 py-2.5 border-b ${borderColor} ${isDark ? "bg-gray-800/80" : "bg-gray-100/80"
                     }`}
                 >
-                  <div className="flex items-center space-x-2">
-                    <div className="flex space-x-1.5">
+                  <div className="flex items-center space-x-2 min-w-0">
+                    <div className="flex space-x-1.5 shrink-0">
                       <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
                       <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
                       <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
                     </div>
                     <span
-                      className={`text-xs font-mono ml-2 ${secondaryTextColor}`}
+                      className={`text-xs font-mono ml-2 truncate ${secondaryTextColor}`}
                     >
                       PT Andidev — Full Stack Developer
                     </span>
                   </div>
                   <span
-                    className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${isDark
+                    className={`shrink-0 whitespace-nowrap text-[11px] md:text-xs px-2.5 py-0.5 rounded-full font-medium ${isDark
                       ? "bg-gray-700/80 text-gray-300"
                       : "bg-white text-gray-700 border border-gray-200"
                       }`}
@@ -765,7 +902,7 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
                         Full Stack Developer
                       </h3>
                       <p className={`${accentColor} text-sm font-medium mt-0.5`}>
-                        PT Andidev • Parttime
+                        PT Andidev • Parttime (Fleksibel)
                       </p>
                     </div>
                     <div className="flex items-center space-x-1.5 text-xs text-gray-500">
@@ -795,23 +932,23 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
                 className={`perf-card rounded-2xl border ${borderColor} ${cardBg} shadow-sm overflow-hidden transition-all duration-200 hover:shadow-md`}
               >
                 <div
-                  className={`flex items-center justify-between px-4 py-2.5 border-b ${borderColor} ${isDark ? "bg-gray-800/80" : "bg-gray-100/80"
+                  className={`flex items-center justify-between gap-2 px-3.5 md:px-4 py-2.5 border-b ${borderColor} ${isDark ? "bg-gray-800/80" : "bg-gray-100/80"
                     }`}
                 >
-                  <div className="flex items-center space-x-2">
-                    <div className="flex space-x-1.5">
+                  <div className="flex items-center space-x-2 min-w-0">
+                    <div className="flex space-x-1.5 shrink-0">
                       <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
                       <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
                       <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
                     </div>
                     <span
-                      className={`text-xs font-mono ml-2 ${secondaryTextColor}`}
+                      className={`text-xs font-mono ml-2 truncate ${secondaryTextColor}`}
                     >
                       PT Nora Active Indonesia — Full Stack Developer
                     </span>
                   </div>
                   <span
-                    className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${isDark
+                    className={`shrink-0 whitespace-nowrap text-[11px] md:text-xs px-2.5 py-0.5 rounded-full font-medium ${isDark
                       ? "bg-gray-700/80 text-gray-300"
                       : "bg-white text-gray-700 border border-gray-200"
                       }`}
@@ -856,23 +993,23 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
                 className={`perf-card rounded-2xl border ${borderColor} ${cardBg} shadow-sm overflow-hidden transition-all duration-200 hover:shadow-md`}
               >
                 <div
-                  className={`flex items-center justify-between px-4 py-2.5 border-b ${borderColor} ${isDark ? "bg-gray-800/80" : "bg-gray-100/80"
+                  className={`flex items-center justify-between gap-2 px-3.5 md:px-4 py-2.5 border-b ${borderColor} ${isDark ? "bg-gray-800/80" : "bg-gray-100/80"
                     }`}
                 >
-                  <div className="flex items-center space-x-2">
-                    <div className="flex space-x-1.5">
+                  <div className="flex items-center space-x-2 min-w-0">
+                    <div className="flex space-x-1.5 shrink-0">
                       <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
                       <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
                       <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
                     </div>
                     <span
-                      className={`text-xs font-mono ml-2 ${secondaryTextColor}`}
+                      className={`text-xs font-mono ml-2 truncate ${secondaryTextColor}`}
                     >
                       JuangDev — Founder &amp; Full Stack Developer
                     </span>
                   </div>
                   <span
-                    className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${isDark
+                    className={`shrink-0 whitespace-nowrap text-[11px] md:text-xs px-2.5 py-0.5 rounded-full font-medium ${isDark
                       ? "bg-gray-700/80 text-gray-300"
                       : "bg-white text-gray-700 border border-gray-200"
                       }`}
@@ -900,7 +1037,7 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
                       Mendirikan dan menjalankan studio pengembangan web JuangDev sebagai platform usaha freelance mandiri.
                     </li>
                     <li>
-                      Merancang dan menjual 10+ produk digital berupa template boilerplate website siap pakai (Landing Page, Company Profile, E-Commerce, POS Kasir, Sistem Informasi) menggunakan Laravel, Blade, dan Tailwind CSS.
+                      Merancang dan mengembangkan 20+ produk digital serta proyek aplikasi web siap pakai (SaaS, E-Commerce, POS Kasir, Sistem Informasi, Company Profile, Landing Page) menggunakan Laravel, Blade, dan Tailwind CSS.
                     </li>
                     <li>
                       Menangani seluruh siklus proyek klien: konsultasi kebutuhan, pengembangan fitur kustom (payment gateway, integrasi WhatsApp, dashboard admin), hingga deployment dan dukungan purna jual.
@@ -917,23 +1054,23 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
                 className={`perf-card rounded-2xl border ${borderColor} ${cardBg} shadow-sm overflow-hidden transition-all duration-200 hover:shadow-md`}
               >
                 <div
-                  className={`flex items-center justify-between px-4 py-2.5 border-b ${borderColor} ${isDark ? "bg-gray-800/80" : "bg-gray-100/80"
+                  className={`flex items-center justify-between gap-2 px-3.5 md:px-4 py-2.5 border-b ${borderColor} ${isDark ? "bg-gray-800/80" : "bg-gray-100/80"
                     }`}
                 >
-                  <div className="flex items-center space-x-2">
-                    <div className="flex space-x-1.5">
+                  <div className="flex items-center space-x-2 min-w-0">
+                    <div className="flex space-x-1.5 shrink-0">
                       <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
                       <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
                       <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
                     </div>
                     <span
-                      className={`text-xs font-mono ml-2 ${secondaryTextColor}`}
+                      className={`text-xs font-mono ml-2 truncate ${secondaryTextColor}`}
                     >
                       PT Weza Group — Web Developer
                     </span>
                   </div>
                   <span
-                    className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${isDark
+                    className={`shrink-0 whitespace-nowrap text-[11px] md:text-xs px-2.5 py-0.5 rounded-full font-medium ${isDark
                       ? "bg-gray-700/80 text-gray-300"
                       : "bg-white text-gray-700 border border-gray-200"
                       }`}
@@ -975,23 +1112,23 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
                 className={`perf-card rounded-2xl border ${borderColor} ${cardBg} shadow-sm overflow-hidden transition-all duration-200 hover:shadow-md`}
               >
                 <div
-                  className={`flex items-center justify-between px-4 py-2.5 border-b ${borderColor} ${isDark ? "bg-gray-800/80" : "bg-gray-100/80"
+                  className={`flex items-center justify-between gap-2 px-3.5 md:px-4 py-2.5 border-b ${borderColor} ${isDark ? "bg-gray-800/80" : "bg-gray-100/80"
                     }`}
                 >
-                  <div className="flex items-center space-x-2">
-                    <div className="flex space-x-1.5">
+                  <div className="flex items-center space-x-2 min-w-0">
+                    <div className="flex space-x-1.5 shrink-0">
                       <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
                       <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
                       <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
                     </div>
                     <span
-                      className={`text-xs font-mono ml-2 ${secondaryTextColor}`}
+                      className={`text-xs font-mono ml-2 truncate ${secondaryTextColor}`}
                     >
                       BEM Fakultas Ilmu Komputer — Divisi Media
                     </span>
                   </div>
                   <span
-                    className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${isDark
+                    className={`shrink-0 whitespace-nowrap text-[11px] md:text-xs px-2.5 py-0.5 rounded-full font-medium ${isDark
                       ? "bg-gray-700/80 text-gray-300"
                       : "bg-white text-gray-700 border border-gray-200"
                       }`}
@@ -1035,17 +1172,17 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
     case "skills":
       return (
         <div
-          className="p-8"
+          className="p-5 md:p-8"
           style={{
             fontFamily:
               '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
           }}
         >
-          <h1 className={`text-4xl font-light mb-8 ${textColor}`}>
+          <h1 className={`text-3xl md:text-4xl font-light mb-6 md:mb-8 ${textColor}`}>
             Keahlian &amp; Teknologi
           </h1>
 
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
+          <div className="grid md:grid-cols-2 gap-5 md:gap-8 mb-8 md:mb-12">
             {SKILLS.map((skillGroup) => {
               const IconComponent = skillGroup.icon;
               return (
@@ -1191,58 +1328,45 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
             ))}
           </div>
 
-          {/* Lightbox Modal Preview Sertifikat Penuh */}
-          {selectedCert && (
-            <div
-              className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
-              onClick={() => setSelectedCert(null)}
-            >
+          {/* Popup Layar Penuh Preview Sertifikat */}
+          {selectedCert &&
+            createPortal(
               <div
-                className={`relative max-w-3xl w-full rounded-2xl overflow-hidden shadow-2xl border ${borderColor} ${cardBg} p-4 sm:p-6`}
-                onClick={(e) => e.stopPropagation()}
+                className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 sm:p-6 animate-fade-in"
+                onClick={() => setSelectedCert(null)}
               >
-                {/* Header Modal */}
-                <div className="flex items-center justify-between mb-3">
-                  <div>
-                    {selectedCert.badge && (
-                      <span className="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300">
-                        {selectedCert.badge}
-                      </span>
-                    )}
-                    <h4 className={`text-lg sm:text-xl font-semibold ${textColor} mt-1`}>
-                      {selectedCert.title}
-                    </h4>
-                  </div>
-                  <button
-                    onClick={() => setSelectedCert(null)}
-                    className={`p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors ${textColor}`}
-                    title="Tutup"
-                  >
-                    <X size={20} />
-                  </button>
-                </div>
+                {/* Tombol Tutup Floating */}
+                <button
+                  onClick={() => setSelectedCert(null)}
+                  className="absolute top-4 right-4 sm:top-6 sm:right-6 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white backdrop-blur-md transition-all duration-150 hover:scale-110 shadow-2xl z-50 cursor-pointer"
+                  title="Tutup (Esc)"
+                  aria-label="Tutup"
+                >
+                  <X size={26} />
+                </button>
 
-                {/* Foto Penuh Sertifikat */}
-                <div className="relative rounded-xl overflow-hidden bg-black/20 flex items-center justify-center max-h-[65vh]">
+                {/* Gambar Sertifikat Full */}
+                <div
+                  className="relative max-w-[95vw] max-h-[88vh] flex items-center justify-center select-none"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <img
                     src={selectedCert.image}
                     alt={selectedCert.title}
-                    className="max-h-[65vh] w-auto max-w-full object-contain rounded-lg shadow-inner"
+                    className="max-h-[88vh] max-w-[92vw] w-auto h-auto object-contain rounded-xl shadow-2xl"
                   />
                 </div>
 
-                {/* Keterangan */}
-                <div className="mt-4 pt-3 border-t border-gray-200/40 dark:border-gray-700/40">
-                  <p className={`${secondaryTextColor} text-sm leading-relaxed text-justify mb-2`}>
-                    {selectedCert.description}
-                  </p>
-                  <p className={`${secondaryTextColor} text-xs font-mono`}>
-                    Nomor Registrasi / Seri: {selectedCert.number}
-                  </p>
+                {/* Caption Minimalis Floating di Bawah */}
+                <div
+                  className="mt-3 px-4 py-2 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white text-xs sm:text-sm font-medium shadow-lg max-w-[90vw] truncate text-center"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {selectedCert.title} {selectedCert.number !== "-" ? `• ${selectedCert.number}` : ""}
                 </div>
-              </div>
-            </div>
-          )}
+              </div>,
+              document.body
+            )}
 
           <div className="mt-12 text-center">
             <p className={`${secondaryTextColor} mb-6 text-lg`}>
@@ -1268,8 +1392,7 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
                 Proyek Unggulan
               </h1>
               <p className={`mt-2 ${secondaryTextColor}`}>
-                Kumpulan proyek aplikasi web kustom, e-commerce, dan produk
-                boilerplate dari{" "}
+                Kurasi proyek pilihan dari aplikasi perusahaan, produk SaaS, hingga e-commerce. Untuk melihat keseluruhan 20+ proyek web lainnya, jelajahi katalog lengkap di{" "}
                 <a
                   href="https://juangdev.my.id"
                   target="_blank"
@@ -1277,8 +1400,8 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
                   className={`${accentColor} font-medium hover:underline`}
                 >
                   JuangDev
-                </a>{" "}
-                beserta proyek klien yang telah dipublikasikan.
+                </a>
+                .
               </p>
             </div>
           </div>
@@ -1349,7 +1472,7 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
                       </div>
 
                       {/* Area Deskripsi & Fitur yang bisa di-scroll mandiri tiap kartu jika panjang */}
-                      <div className="overflow-y-auto max-h-44 md:max-h-52 my-3 pr-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+                      <div className="md:overflow-y-auto md:max-h-52 my-3 md:pr-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
                         <p
                           className={`${secondaryTextColor} leading-relaxed text-sm md:text-base mb-3`}
                         >
@@ -1403,8 +1526,7 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
 
           <div className="mt-12 text-center">
             <p className={`${secondaryTextColor} mb-6 text-lg`}>
-              Ingin melihat produk boilerplate siap pakai lainnya atau memesan
-              website kustom?
+              Ingin menjelajahi keseluruhan 20+ proyek web dan produk digital lainnya yang telah saya kembangkan?
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <a
@@ -1413,7 +1535,7 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
                 rel="noopener noreferrer"
                 className="px-8 py-3 inline-block rounded-lg font-medium transition-transform duration-150 hover:scale-105 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg"
               >
-                Kunjungi JuangDev (juangdev.my.id)
+                Lihat 20+ Katalog Karya di JuangDev
               </a>
               <a
                 href="https://github.com/faulnam?tab=repositories"
@@ -1432,6 +1554,7 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
       const categories = [
         "Semua",
         "Kolaborasi Tim",
+        "Organisasi & Kampus",
         "Meeting & Standup",
         "Sesi Coding",
         "Pengembangan Web",
@@ -1526,7 +1649,7 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
                       {act.title}
                     </h3>
 
-                    <p className={`${secondaryTextColor} text-sm leading-relaxed text-justify mb-3`}>
+                    <p className={`${secondaryTextColor} text-sm leading-relaxed text-left md:text-justify mb-3`}>
                       {act.description}
                     </p>
                   </div>
@@ -1550,64 +1673,45 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
             ))}
           </div>
 
-          {/* Lightbox Modal Preview Foto Penuh */}
-          {selectedDoc && (
-            <div
-              className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
-              onClick={() => setSelectedDoc(null)}
-            >
+          {/* Popup Layar Penuh Foto Dokumentasi Saja */}
+          {selectedDoc &&
+            createPortal(
               <div
-                className={`relative max-w-4xl w-full rounded-2xl overflow-hidden shadow-2xl border ${borderColor} ${cardBg} p-4 sm:p-6`}
-                onClick={(e) => e.stopPropagation()}
+                className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 sm:p-6 animate-fade-in"
+                onClick={() => setSelectedDoc(null)}
               >
-                {/* Header Modal */}
-                <div className="flex items-center justify-between mb-3">
-                  <div>
-                    <span
-                      className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${isDark
-                        ? "bg-blue-900/50 text-blue-300"
-                        : "bg-blue-100 text-blue-800"
-                        }`}
-                    >
-                      {selectedDoc.organization} • {selectedDoc.category}
-                    </span>
-                    <h4 className={`text-lg sm:text-xl font-semibold ${textColor} mt-1`}>
-                      {selectedDoc.title}
-                    </h4>
-                  </div>
-                  <button
-                    onClick={() => setSelectedDoc(null)}
-                    className={`p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors ${textColor}`}
-                    title="Tutup"
-                  >
-                    <X size={20} />
-                  </button>
-                </div>
+                {/* Tombol Tutup Floating */}
+                <button
+                  onClick={() => setSelectedDoc(null)}
+                  className="absolute top-4 right-4 sm:top-6 sm:right-6 p-3 rounded-full bg-white/10 hover:bg-white/25 text-white backdrop-blur-md transition-all duration-150 hover:scale-110 shadow-2xl z-50 cursor-pointer"
+                  title="Tutup (Esc)"
+                  aria-label="Tutup"
+                >
+                  <X size={26} />
+                </button>
 
-                {/* Foto Penuh */}
-                <div className="relative rounded-xl overflow-hidden bg-black/20 flex items-center justify-center max-h-[60vh]">
+                {/* Gambar Dokumentasi Full */}
+                <div
+                  className="relative max-w-[95vw] max-h-[88vh] flex items-center justify-center select-none"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <img
                     src={selectedDoc.image}
                     alt={selectedDoc.title}
-                    className="max-h-[60vh] w-auto max-w-full object-contain rounded-lg shadow-inner"
+                    className="max-h-[88vh] max-w-[92vw] w-auto h-auto object-contain rounded-xl shadow-2xl"
                   />
                 </div>
 
-                {/* Keterangan */}
-                <div className="mt-4 pt-3 border-t border-gray-200/40 dark:border-gray-700/40 flex items-start justify-between gap-4">
-                  <p className={`${secondaryTextColor} text-sm leading-relaxed text-justify`}>
-                    {selectedDoc.description}
-                  </p>
-                  <span
-                    className={`text-xs font-mono shrink-0 px-2.5 py-1 rounded-md ${isDark ? "bg-gray-800 text-gray-400" : "bg-gray-100 text-gray-600"
-                      }`}
-                  >
-                    {selectedDoc.date}
-                  </span>
+                {/* Caption Minimalis Floating di Bawah */}
+                <div
+                  className="mt-3 px-4 py-2 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white text-xs sm:text-sm font-medium shadow-lg max-w-[90vw] truncate text-center"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {selectedDoc.title} • {selectedDoc.organization} ({selectedDoc.date})
                 </div>
-              </div>
-            </div>
-          )}
+              </div>,
+              document.body
+            )}
         </div>
       );
     }
@@ -1615,19 +1719,19 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
     case "contact":
       return (
         <div
-          className="p-8"
+          className="p-5 md:p-8"
           style={{
             fontFamily:
               '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
           }}
         >
-          <h1 className={`text-4xl font-light mb-8 ${textColor}`}>
+          <h1 className={`text-3xl md:text-4xl font-light mb-6 md:mb-8 ${textColor}`}>
             Hubungi Saya
           </h1>
 
-          <div className="grid md:grid-cols-2 gap-12">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12">
             <div>
-              <h2 className={`text-2xl font-semibold mb-8 ${textColor}`}>
+              <h2 className={`text-xl md:text-2xl font-semibold mb-5 md:mb-8 ${textColor}`}>
                 Informasi Kontak
               </h2>
 
@@ -1636,12 +1740,12 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
                   href="mailto:syifakul.anm@gmail.com"
                   className={`flex items-center p-4 rounded-xl ${cardBg} border ${borderColor} hover:shadow-md transition-shadow duration-200`}
                 >
-                  <div className="p-3 rounded-lg mr-4 bg-gradient-to-br from-red-500 to-pink-600">
+                  <div className="p-3 rounded-lg mr-4 shrink-0 bg-gradient-to-br from-red-500 to-pink-600">
                     <Mail className="text-white" size={20} />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className={`font-semibold ${textColor}`}>Email</p>
-                    <p className={`${accentColor} hover:underline`}>
+                    <p className={`${accentColor} hover:underline truncate`}>
                       syifakul.anm@gmail.com
                     </p>
                   </div>
@@ -1677,7 +1781,7 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
                   </div>
                   <div>
                     <p className={`font-semibold ${textColor}`}>
-                      Studio &amp; Boilerplate Website
+                      Katalog 20+ Proyek &amp; Studio Web
                     </p>
                     <p className={`${accentColor} hover:underline`}>
                       juangdev.my.id
@@ -1727,12 +1831,12 @@ const WindowContent: React.FC<WindowContentProps> = React.memo(({ app, isDark })
                   Mari Bekerja Sama!
                 </h3>
                 <p
-                  className={`text-justify ${secondaryTextColor} leading-relaxed text-base`}
+                  className={`text-left md:text-justify ${secondaryTextColor} leading-relaxed text-sm md:text-base`}
                 >
-                  Saya selalu terbuka untuk peluang kerja, kolaborasi proyek
-                  pengembangan aplikasi web, maupun pemesanan produk boilerplate
-                  website siap pakai melalui <strong>JuangDev</strong>. Jangan
-                  ragu untuk menghubungi saya!
+                  Saya siap berkontribusi penuh dalam program magang IT
+                  Programmer / Web Developer, peluang kerja profesional, maupun
+                  kolaborasi pengembangan sistem aplikasi web. Jangan ragu untuk
+                  menghubungi saya!
                 </p>
               </div>
             </div>

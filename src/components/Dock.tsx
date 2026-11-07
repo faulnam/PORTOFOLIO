@@ -84,15 +84,23 @@ const Dock: React.FC<DockProps> = React.memo(({ isDark, onToggleTheme, onAppClic
     return 1;
   };
 
+  const handleHover = (id: string | null) => {
+    if (typeof window !== "undefined" && !window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      return;
+    }
+    setHoveredIcon(id);
+  };
+
   return (
-    <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
+    <div className="fixed bottom-2.5 md:bottom-6 left-1/2 transform -translate-x-1/2 z-50 max-w-[calc(100vw-12px)] md:max-w-none">
       <div
-        className={`flex items-end space-x-2 px-4 py-3 rounded-2xl backdrop-blur-md border transition-colors duration-200 ${
+        data-guide="dock"
+        className={`flex items-end space-x-1 sm:space-x-1.5 md:space-x-2 px-2 py-2 md:px-4 md:py-3 rounded-2xl backdrop-blur-md border transition-colors duration-200 overflow-x-auto md:overflow-visible max-w-full scrollbar-none ${
           isDark
             ? "bg-gray-900/80 border-gray-700/50 shadow-2xl shadow-black/20"
             : "bg-white/80 border-white/40 shadow-2xl shadow-black/10"
         }`}
-        onMouseLeave={() => setHoveredIcon(null)}
+        onMouseLeave={() => handleHover(null)}
       >
         {APPS.map((app, index) => {
           const IconComponent = app.icon;
@@ -102,13 +110,13 @@ const Dock: React.FC<DockProps> = React.memo(({ isDark, onToggleTheme, onAppClic
           return (
             <div
               key={app.id}
-              className="relative group cursor-pointer"
-              onMouseEnter={() => setHoveredIcon(app.id)}
+              className="relative group cursor-pointer shrink-0"
+              onMouseEnter={() => handleHover(app.id)}
               onClick={() => onAppClick(app.id)}
             >
               {/* Tooltip */}
               <div
-                className={`absolute -top-14 left-1/2 transform -translate-x-1/2 px-3 py-1 rounded-lg text-xs whitespace-nowrap transition-all duration-150 pointer-events-none ${
+                className={`hidden md:block absolute -top-14 left-1/2 transform -translate-x-1/2 px-3 py-1 rounded-lg text-xs whitespace-nowrap transition-all duration-150 pointer-events-none ${
                   isHovered
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-2"
@@ -137,15 +145,14 @@ const Dock: React.FC<DockProps> = React.memo(({ isDark, onToggleTheme, onAppClic
                 }}
               >
                 <div
-                  className={`w-14 h-14 rounded-xl bg-gradient-to-br ${
+                  className={`w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 rounded-lg md:rounded-xl bg-gradient-to-br ${
                     app.color
                   } shadow-lg flex items-center justify-center ${
                     isHovered ? "shadow-xl" : ""
                   }`}
                 >
                   <IconComponent
-                    size={28}
-                    className="text-white drop-shadow-sm"
+                    className="w-4 h-4 sm:w-5 sm:h-5 md:w-7 md:h-7 text-white drop-shadow-sm"
                   />
                 </div>
                 <div
@@ -160,19 +167,19 @@ const Dock: React.FC<DockProps> = React.memo(({ isDark, onToggleTheme, onAppClic
 
         {/* Separator */}
         <div
-          className={`w-px h-12 mx-2 ${
+          className={`w-px h-7 sm:h-9 md:h-12 mx-0.5 sm:mx-1 md:mx-2 shrink-0 ${
             isDark ? "bg-gray-600/50" : "bg-gray-400/50"
           }`}
         />
 
         {/* Theme Toggle */}
         <div
-          className="relative group cursor-pointer"
-          onMouseEnter={() => setHoveredIcon("theme")}
+          className="relative group cursor-pointer shrink-0"
+          onMouseEnter={() => handleHover("theme")}
           onClick={onToggleTheme}
         >
           <div
-            className={`absolute -top-14 left-1/2 transform -translate-x-1/2 px-3 py-1 rounded-lg text-xs whitespace-nowrap transition-all duration-150 pointer-events-none ${
+            className={`hidden md:block absolute -top-14 left-1/2 transform -translate-x-1/2 px-3 py-1 rounded-lg text-xs whitespace-nowrap transition-all duration-150 pointer-events-none ${
               hoveredIcon === "theme"
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-2"
@@ -200,16 +207,16 @@ const Dock: React.FC<DockProps> = React.memo(({ isDark, onToggleTheme, onAppClic
             }}
           >
             <div
-              className={`w-14 h-14 rounded-xl shadow-lg flex items-center justify-center ${
+              className={`w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 rounded-lg md:rounded-xl shadow-lg flex items-center justify-center ${
                 isDark
                   ? "bg-gradient-to-br from-yellow-400 to-orange-500"
                   : "bg-gradient-to-br from-indigo-500 to-purple-600"
               } ${hoveredIcon === "theme" ? "shadow-xl" : ""}`}
             >
               {isDark ? (
-                <Sun size={28} className="text-white drop-shadow-sm" />
+                <Sun className="w-4 h-4 sm:w-5 sm:h-5 md:w-7 md:h-7 text-white drop-shadow-sm" />
               ) : (
-                <Moon size={28} className="text-white drop-shadow-sm" />
+                <Moon className="w-4 h-4 sm:w-5 sm:h-5 md:w-7 md:h-7 text-white drop-shadow-sm" />
               )}
             </div>
             <div

@@ -7,6 +7,7 @@ interface WindowProps {
   isDark: boolean;
   onClose: () => void;
   onFocus?: () => void;
+  onInteract?: () => void;
   zIndex?: number;
 }
 
@@ -17,6 +18,7 @@ const Window: React.FC<WindowProps> = React.memo(({
   isDark, 
   onClose,
   onFocus,
+  onInteract,
   zIndex = 30 
 }) => {
   const [isMinimized, setIsMinimized] = useState(false);
@@ -29,10 +31,10 @@ const Window: React.FC<WindowProps> = React.memo(({
 
   const isWide = id === 'projects' || id === 'documentation';
   const sizeClass = isMaximized 
-    ? 'w-[98vw] max-w-7xl h-[88vh]' 
+    ? 'w-[96vw] md:w-[98vw] max-w-7xl h-[calc(100dvh-6.5rem)] md:h-[88vh]' 
     : isWide 
-      ? 'w-[92vw] max-w-5xl max-h-[85vh]' 
-      : 'w-[90vw] max-w-4xl max-h-[85vh]';
+      ? 'w-[94vw] md:w-[92vw] max-w-5xl max-h-[calc(100dvh-6.5rem)] md:max-h-[85vh]' 
+      : 'w-[94vw] md:w-[90vw] max-w-4xl max-h-[calc(100dvh-6.5rem)] md:max-h-[85vh]';
 
   const applyTransform = useCallback((x: number, y: number) => {
     if (windowRef.current) {
@@ -42,8 +44,10 @@ const Window: React.FC<WindowProps> = React.memo(({
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (isMaximized) return;
+    if (window.innerWidth < 768) return;
     if ((e.target as HTMLElement).closest('button')) return;
     onFocus?.();
+    onInteract?.();
     isDraggingRef.current = true;
     dragStartRef.current = {
       x: e.clientX - offsetRef.current.x,
@@ -107,7 +111,7 @@ const Window: React.FC<WindowProps> = React.memo(({
 
   return (
     <div 
-      className="fixed inset-0 flex items-center justify-center p-4 pt-10 pb-24 pointer-events-none"
+      className="fixed inset-0 flex items-center justify-center p-2.5 pt-9 pb-16 md:p-4 md:pt-10 md:pb-24 pointer-events-none"
       style={{ zIndex }}
       onMouseDown={() => onFocus?.()}
     >
@@ -132,7 +136,7 @@ const Window: React.FC<WindowProps> = React.memo(({
       >
         {/* Title Bar */}
         <div 
-          className={`flex items-center justify-between px-5 py-3.5 border-b cursor-move select-none ${
+          className={`flex items-center justify-between px-3.5 py-2.5 md:px-5 md:py-3.5 border-b md:cursor-move select-none ${
             isDark 
               ? 'border-gray-700/70 bg-gray-800' 
               : 'border-gray-200/80 bg-gray-50'
@@ -143,21 +147,30 @@ const Window: React.FC<WindowProps> = React.memo(({
           }}
         >
           {/* Traffic Lights */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 shrink-0">
             <button
+              data-guide={id === 'home' ? 'close' : undefined}
               onClick={onClose}
               className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-600 transition-transform duration-150 hover:scale-110"
               title="Close"
               aria-label="Close window"
             />
             <button
-              onClick={() => setIsMinimized(true)}
+              data-guide={id === 'home' ? 'minimize' : undefined}
+              onClick={() => {
+                onInteract?.();
+                setIsMinimized(true);
+              }}
               className="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-600 transition-transform duration-150 hover:scale-110"
               title="Minimize"
               aria-label="Minimize window"
             />
             <button 
-              onClick={toggleMaximize}
+              data-guide={id === 'home' ? 'maximize' : undefined}
+              onClick={() => {
+                onInteract?.();
+                toggleMaximize();
+              }}
               className="w-3 h-3 rounded-full bg-green-500 hover:bg-green-600 transition-transform duration-150 hover:scale-110"
               title="Maximize"
               aria-label="Maximize window"
@@ -167,17 +180,17 @@ const Window: React.FC<WindowProps> = React.memo(({
           </div>
 
           {/* Title */}
-          <h2 className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          <h2 className={`text-xs md:text-sm font-medium truncate px-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
             {title}
           </h2>
 
           {/* Spacer */}
-          <div className="w-16" />
+          <div className="w-11 md:w-16 shrink-0" />
         </div>
 
         {/* Content */}
         <div className={`overflow-y-auto window-scroll ${
-          isMaximized ? 'h-[calc(85vh-53px)]' : 'max-h-[calc(82vh-53px)]'
+          isMaximized ? 'h-[calc(100dvh-6.5rem-41px)] md:h-[calc(85vh-53px)]' : 'max-h-[calc(100dvh-6.5rem-41px)] md:max-h-[calc(82vh-53px)]'
         } scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent`}>
           {children}
         </div>

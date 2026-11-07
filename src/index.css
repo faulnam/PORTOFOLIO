@@ -6,6 +6,15 @@
 .scrollbar-thin {
   scrollbar-width: thin;
 }
+
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
 @keyframes blink {
   0%, 50%, 100% {
     opacity: 1;
@@ -74,6 +83,86 @@
 .animate-window-open {
   animation: windowPopIn 180ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
   will-change: transform, opacity;
+}
+
+/* Onboarding guide arrow & callout animations */
+@keyframes guideDraw {
+  from {
+    stroke-dashoffset: 160;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes guideBadgeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes guideFloatUp {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(-2px, -3px, 0);
+  }
+}
+
+@keyframes guideBounceDown {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, 5px, 0);
+  }
+}
+
+@keyframes guideRingPulse {
+  0%, 100% {
+    opacity: 0.75;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.2;
+    transform: scale(1.25);
+  }
+}
+
+.animate-guide-draw {
+  stroke-dasharray: 160;
+  stroke-dashoffset: 160;
+  animation: guideDraw 550ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-guide-badge {
+  opacity: 0;
+  animation: guideBadgeIn 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-guide-float-up {
+  animation: guideFloatUp 2.2s ease-in-out infinite;
+}
+
+.animate-guide-bounce-down {
+  animation: guideBounceDown 1.8s ease-in-out infinite;
+}
+
+.animate-guide-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: guideRingPulse 2s ease-in-out infinite;
 }
 
 /* Optimize scrolling & offscreen card rendering */
